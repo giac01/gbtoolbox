@@ -101,17 +101,19 @@
   # browser()
   if(base::is.na(stats::cor(x,y, use="pairwise.complete.obs"))){
     # return(list(CI="0", N=nrow(na.omit(cbind.data.frame(x,y))), CI_l="0"))
-    return(base::list(CI="0", N="0", CI_l="0"))
+    return(base::list(CI="", N="", CI_l=""))
 
   } else {
     CI = stats::cor.test(x,y)$conf.int[1:2]
-    CI = base::gsub("^\\s","",gsub("0\\.", "\\.",round(CI, digits=n_decimal_places)))
+    # CI = base::gsub("^\\s","",gsub("0\\.", "\\.",round(CI, digits=n_decimal_places)))
+    CI = gbtools::apa_num(CI)
     N = base::as.numeric(cor.test(x,y)$parameter + 2)
     CI_l =     base::paste0( "[",CI[1],", ",CI[2],"]", sep="")
     out =    base::paste0(N,"\n[",CI[1],", ",CI[2],"]", sep="")
     return(list(CI=out, N=N, CI_l=CI_l))
   }
 }
+
 
 .swapsies = function(x, input, replacement){
   return(replacement[match(x, input)])

@@ -6,7 +6,7 @@
 #' The function provides a wrapper around ggplot2 to quickly create a correlation matrix.
 #'
 #' @param dat Input dataframe or matrix (*do not input a correlation matrix*).
-#' @param Variables_Labels Character vector of variable Labels, corresponding to each column in dat. If missing (NULL) then colnames(dat) will be used.
+#' @param variable_labels Character vector of variable Labels, corresponding to each column in dat. If missing (NULL) then colnames(dat) will be used.
 #' @param textadjust Scalar. Adjust text size by a magnification factor.
 #' @param sample_size Logical. Include sample size on upper diagononal (TRUE) or leave blank (FALSE).
 #' @param confidence_interval Logical. Include confidence interval on upper diagonal (TRUE) or leave blank (FALSE).
@@ -22,13 +22,13 @@
 #' X = as.data.frame(X)
 #' My_Labels = c(paste0("Predictor ",1:5), paste0("Outcome ",1:5))
 #'
-#' plot_correlations(X, Variables_Labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
+#' plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
 #'
-#' plot_correlations(X, Variables_Labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) + ggplot2::labs(title = "My Title")
+#' plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) + ggplot2::labs(title = "My Title")
 #' @export
 #'
 plot_correlations = function(dat,
-                   Variables_Labels=NULL,
+                   variable_labels=NULL,
                    textadjust=2,
                    sample_size=TRUE,
                    confidence_interval=TRUE,
@@ -44,14 +44,14 @@ plot_correlations = function(dat,
   if (cluster_variables) {
     new_order = gbtools:::.sortVar(dat)
     dat = dat[,new_order]
-    if (!base::is.null(Variables_Labels)){
-      Variables_Labels = Variables_Labels[new_order]
+    if (!base::is.null(variable_labels)){
+      variable_labels = variable_labels[new_order]
     }
   }
 
   Variables = base::colnames(dat)
-  if(is.null(Variables_Labels)){
-    Variables_Labels = base::colnames(dat)
+  if(is.null(variable_labels)){
+    variable_labels = base::colnames(dat)
   }
 
   matrix_scores = dat
@@ -92,7 +92,7 @@ plot_correlations = function(dat,
   if(!sample_size){
     PlotMat[base::lower.tri(PlotMat, diag=TRUE)]=""
   }
-  base::colnames(PlotMat) = Variables_Labels ;  base::rownames(PlotMat) = Variables_Labels
+  base::colnames(PlotMat) = variable_labels ;  base::rownames(PlotMat) = variable_labels
 
   PlotMat = base::data.frame(reshape2::melt(PlotMat), stringsAsFactors = FALSE)
   head(PlotMat)

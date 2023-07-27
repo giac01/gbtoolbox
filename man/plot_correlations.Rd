@@ -6,7 +6,7 @@
 \usage{
 plot_correlations(
   dat,
-  Variables_Labels = NULL,
+  variable_labels = NULL,
   textadjust = 2,
   sample_size = TRUE,
   confidence_interval = TRUE,
@@ -21,7 +21,7 @@ plot_correlations(
 \arguments{
 \item{dat}{Input dataframe or matrix (*do not input a correlation matrix*).}
 
-\item{Variables_Labels}{Character vector of variable Labels, corresponding to each column in dat. If missing (NULL) then colnames(dat) will be used.}
+\item{variable_labels}{Character vector of variable Labels, corresponding to each column in dat. If missing (NULL) then colnames(dat) will be used.}
 
 \item{textadjust}{Scalar. Adjust text size by a magnification factor.}
 
@@ -48,7 +48,7 @@ X = sapply(1:10, function(i) rnorm(100))
 X = as.data.frame(X)
 My_Labels = c(paste0("Predictor ",1:5), paste0("Outcome ",1:5))
 
-plot_correlations(X, Variables_Labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
+plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
 
-plot_correlations(X, Variables_Labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) + ggplot2::labs(title = "My Title")
+plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) + ggplot2::labs(title = "My Title")
 }
