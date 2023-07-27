@@ -1,0 +1,23 @@
+Package: gbtools
+Type: Package
+Title: Some handy R tools
+Version: 0.0.1
+Author: Giacomo Bignardi
+Maintainer: Giacomo Bignardi <bignardig@outlook.com>
+Description: Assortment of handy R functions
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+Imports: 
+    stats,
+    base,
+    utils,
+    reshape2,
+    jtools,
+    ggplot2
+Exports:
+    map_normal,
+    plotcor
+Suggests: 
+    testthat
