@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_normal.R
 \name{map_normal}
 \alias{map_normal}
-\title{mapnornmal - Map any continuous variable onto a Normal Distribution}
+\title{map_normal - Map any continuous variable onto a Normal Distribution}
 \usage{
 map_normal(x, MinDim = 2, rescale = TRUE)
 }

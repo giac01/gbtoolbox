@@ -1,7 +1,6 @@
 library(testthat)
 library(devtools)
 devtools::load_all()
-library(giaco_tools)
 
 # devtools::test_active_file()
 
@@ -12,6 +11,12 @@ test_that("Check .R_ConInt function ", {
   expect_error(gbtools:::.R_ConInt(rnorm(10), rnorm(10)), NA)
 })
 
+test_that("Check apa_num ", {
+  expect_error(gbtools::apa_num(rnorm(10)), NA)
+})
+
+
+
 
 test_that("Check plotcor",{
 
@@ -20,10 +25,23 @@ test_that("Check plotcor",{
 
   #Get package R result
   expect_error(
-    gbtools::plotcor(mtcars)
+    gbtools::plot_correlations(mtcars)
 
     , NA
   )
 
 })
 
+test_that("Check plotcor clustering",{
+
+  data("mtcars")
+  #Get base R result
+
+  #Get package R result
+  expect_error(
+    gbtools::plot_correlations(mtcars, cluster_variables = TRUE)
+
+    , NA
+  )
+
+})

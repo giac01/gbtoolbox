@@ -8,11 +8,12 @@
 #' @param dat Input dataframe or matrix (*do not input a correlation matrix*).
 #' @param Variables_Labels Character vector of variable Labels, corresponding to each column in dat. If missing (NULL) then colnames(dat) will be used.
 #' @param textadjust Scalar. Adjust text size by a magnification factor.
-#' @param includeN Logical. Include sample size on upper diagononal (TRUE) or leave blank (FALSE).
-#' @param reportCI Logical. Include confidence interval on upper diagonal (TRUE) or leave blank (FALSE).
+#' @param sample_size Logical. Include sample size on upper diagononal (TRUE) or leave blank (FALSE).
+#' @param confidence_interval Logical. Include confidence interval on upper diagonal (TRUE) or leave blank (FALSE).
 #' @param low_colour Logical. Hex colour code for the lowest correlation.
 #' @param high_colour Logical. Hex colour code for the highest correlation.
 #' @param abs_colour Logical. If TRUE, will use the absolute correlation (i.e. ignoring whether the correlation is positive or negative) for determining square colour.
+#' @param n_decimal_places How many decimal places to use for plotting
 #'
 #' @return ggplot
 #'
@@ -21,19 +22,27 @@
 #' X = as.data.frame(X)
 #' My_Labels = c(paste0("Predictor ",1:5), paste0("Outcome ",1:5))
 #'
-#' plotcor(X, Variables_Labels = My_Labels, includeN = TRUE, reportCI = FALSE)
+#' plot_correlations(X, Variables_Labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
 #'
+#' plot_correlations(X, Variables_Labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) + ggplot2::labs(title = "My Title")
 #' @export
 #'
-plotcor = function(dat,
-                   Variables_Labels=NULL, textadjust=2, includeN=TRUE, reportCI=TRUE,
-                   low_colour="#0072B2", high_colour="#D55E00", mid_colour="white", abs_colour=TRUE,
-                   cluster_variables = FALSE, ndigits = 2
+plot_correlations = function(dat,
+                   Variables_Labels=NULL,
+                   textadjust=2,
+                   sample_size=TRUE,
+                   confidence_interval=TRUE,
+                   low_colour="#0072B2",
+                   high_colour="#D55E00",
+                   mid_colour="white",
+                   abs_colour=TRUE,
+                   cluster_variables = FALSE,
+                   n_decimal_places = 2
 ){
   if (!base::is.data.frame(dat)) {dat=base::as.data.frame(dat)}
 
   if (cluster_variables) {
-    new_order = giacotools:::.sortVar(dat)
+    new_order = gbtools:::.sortVar(dat)
     dat = dat[,new_order]
     if (!base::is.null(Variables_Labels)){
       Variables_Labels = Variables_Labels[new_order]
@@ -47,8 +56,9 @@ plotcor = function(dat,
 
   matrix_scores = dat
   Mat_Cor = cor(matrix_scores, use="pairwise.complete.obs")
-  Mat_Cor = matrix(sprintf(paste0("%.",ndigits,"f"), Mat_Cor), ncol = ncol(Mat_Cor))
-  Mat_Cor = apply(Mat_Cor,2, function(x) gsub("^(-?)0+\\.", "\\1.",x))
+  Mat_Cor = apply(Mat_Cor, 2, gbtools::apa_num)
+  # Mat_Cor = matrix(sprintf(paste0("%.",n_decimal_places,"f"), Mat_Cor), ncol = ncol(Mat_Cor))
+  # Mat_Cor = apply(Mat_Cor,2, function(x) gsub("^(-?)0+\\.", "\\1.",x))
 
   if(abs_colour){
     Mat_Cor_fill = base::abs(stats::cor(matrix_scores, use="pairwise.complete.obs"))  #Correlation matrix for table fill
@@ -65,10 +75,10 @@ plotcor = function(dat,
     ))
 
   #Confidence interval information
-  if(reportCI){
+  if(confidence_interval){
     Mat_CI = sapply(Variables, function(x)
       sapply(Variables, function(y)
-        gbtools:::.R_ConInt(as.numeric(dat[,x]),base::as.numeric(dat[,y]), ndigits = ndigits)$CI
+        gbtools:::.R_ConInt(as.numeric(dat[,x]),base::as.numeric(dat[,y]), n_decimal_places = n_decimal_places)$CI
       ))
     base::diag(Mat_CI) = base::diag(Mat_N)
     Mat_N = Mat_CI
@@ -76,10 +86,10 @@ plotcor = function(dat,
 
   #Create Dataframe For ggplot to Read
   PlotMat = Mat_Cor
-  if(includeN){
+  if(sample_size){
     PlotMat[base::lower.tri(PlotMat, diag=TRUE)]=Mat_N[base::lower.tri(Mat_N, diag=TRUE)]
   }
-  if(!includeN){
+  if(!sample_size){
     PlotMat[base::lower.tri(PlotMat, diag=TRUE)]=""
   }
   base::colnames(PlotMat) = Variables_Labels ;  base::rownames(PlotMat) = Variables_Labels

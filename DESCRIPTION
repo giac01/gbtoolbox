@@ -18,6 +18,7 @@ Imports:
     ggplot2
 Exports:
     map_normal,
-    plotcor
+    plot_correlations,
+    apa_numdevtools
 Suggests: 
     testthat
