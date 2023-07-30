@@ -37,23 +37,24 @@ mtcars_missing[,1:5][runif(n = length(c(t(mtcars_missing[,1:5]))))>.7] <- NA
 mtcars_missing = data.frame(mtcars_missing)
 ```
 
-## plot_correlation function
+## plot_correlations(…)
 
 You can combine standard ggplot2 commands with plot_correlation function
 as shown below.
 
 ``` r
-plot_correlations(mtcars_missing) + ggplot2::labs(title = "Example plot_correlations",
-                                          subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
+plot_correlations(mtcars_missing, textadjust = 1.7) + 
+  ggplot2::labs(title = "Example plot_correlations",
+                subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
                                           )
 ```
 
-    ## Warning in plot_correlations(mtcars_missing): This function is in development, and not yet ready for widespread use. 
+    ## Warning in plot_correlations(mtcars_missing, textadjust = 1.7): This function is in development, and not yet ready for widespread use. 
     ##   Proceed with caution
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-## plot_missing_correlations function
+## plot_missing_correlations(…)
 
 plot_missing_correlations visualises how missingness in your dataset is
 correlated with other variables in your dataset.
@@ -71,7 +72,7 @@ gbtools:::plot_missing_correlations(mtcars_missing)
     ## Warning in gbtools:::plot_missing_correlations(mtcars_missing): This function is in early beta, and not yet ready for widespread use. 
     ##   Proceed with caution
 
-![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 To illustrate what this is doing, consider the correlation highlighted
 in orange above.
@@ -107,11 +108,11 @@ gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1)
     ## Warning in gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1): This function is in early beta, and not yet ready for widespread use. 
     ##   Proceed with caution
 
-![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 This function is still in development, and will likely change over time.
 
-## Plot Pairwise Missingness
+## plot_pairwise_missing(…)
 
 The diagonal shows the number of non-missing observations for each
 variable
@@ -126,4 +127,4 @@ gbtools:::plot_pairwise_missing(mtcars_missing)
     ## Warning in gbtools:::plot_pairwise_missing(mtcars_missing): This function is in early beta, and not yet ready for widespread use. 
     ##   Proceed with caution
 
-![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
