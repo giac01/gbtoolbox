@@ -19,29 +19,33 @@ plot_correlations(
 )
 }
 \arguments{
-\item{dat}{Input dataframe or matrix (*do not input a correlation matrix*).}
+\item{dat}{A dataframe or matrix for which to compute correlations. Note: A correlation matrix should not be provided as input.}
 
-\item{variable_labels}{Character vector of variable Labels, corresponding to each column in dat. If missing (NULL) then colnames(dat) will be used.}
+\item{variable_labels}{A character vector of labels for each variable (i.e., each column in `dat`). If missing (NULL), column names from `dat` are used.}
 
-\item{textadjust}{Scalar. Adjust text size by a magnification factor.}
+\item{textadjust}{A scalar that adjusts text size by a specific magnification factor.}
 
-\item{sample_size}{Logical. Include sample size on upper diagononal (TRUE) or leave blank (FALSE).}
+\item{sample_size}{Logical. If TRUE, the function includes sample sizes on the upper diagonal. If FALSE, these are left blank.}
 
-\item{confidence_interval}{Logical. Include confidence interval on upper diagonal (TRUE) or leave blank (FALSE).}
+\item{confidence_interval}{Logical. If TRUE, the function includes confidence intervals on the upper diagonal. If FALSE, these are left blank.}
 
-\item{low_colour}{Logical. Hex colour code for the lowest correlation.}
+\item{low_colour}{Hex colour code for the lowest correlation value.}
 
-\item{high_colour}{Logical. Hex colour code for the highest correlation.}
+\item{high_colour}{Hex colour code for the highest correlation value.}
 
-\item{abs_colour}{Logical. If TRUE, will use the absolute correlation (i.e. ignoring whether the correlation is positive or negative) for determining square colour.}
+\item{mid_colour}{Hex colour code for the middle point in the correlation scale.}
 
-\item{n_decimal_places}{How many decimal places to use for plotting}
+\item{abs_colour}{Logical. If TRUE, absolute correlation values (i.e., ignoring positive/negative status) are used for determining square colours.}
+
+\item{cluster_variables}{Logical. If TRUE, variables are clustered in the plot. Default is FALSE.}
+
+\item{n_decimal_places}{The number of decimal places to use for plot text.}
 }
 \value{
-ggplot
+A ggplot object of the correlation matrix.
 }
 \description{
-The function provides a wrapper around ggplot2 to quickly create a correlation matrix.
+The function provides a wrapper around ggplot2 to easily create a correlation matrix.
 }
 \examples{
 X = sapply(1:10, function(i) rnorm(100))

@@ -1,0 +1,95 @@
+---
+title: "overview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This vignette provides an overview of the plot_correlations and plot_missing_correlations functions from the gbtools R package. These functions are designed to visualize correlation matrices and explore missing data correlations within a dataset. We'll demonstrate how to use these functions with example data and explain the insights they can provide.
+
+
+
+```{r setup}
+library(gbtools)
+```
+
+## Example Data
+
+We'll use the built-in mtcars dataset. 
+
+To make things more realistic, we'll add some missing data to this dataset. 
+
+```{r}
+
+set.seed(10)
+
+mtcars_missing = as.matrix(mtcars)
+
+mtcars_missing[,1:5][runif(n = length(c(t(mtcars_missing[,1:5]))))>.7] <- NA
+
+mtcars_missing = data.frame(mtcars_missing)
+
+```
+
+
+## plot_correlation function
+
+You can combine standard ggplot2 commands with plot_correlation function as shown below. 
+
+```{r, fig.width = 7, fig.height= 7}
+
+plot_correlations(mtcars_missing) + ggplot2::labs(title = "Example plot_correlations",
+                                          subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
+                                          )
+
+```
+
+## plot_missing_correlations function
+
+plot_missing_correlations visualises how missingness in your dataset is correlated with other variables in your dataset. 
+
+We transform each variable with missing data (in this case, only hp, mpg, drat, disp and cyl have any missing data) into a vector of 1s (missing) and 0s (not missing). We then compute pairwise correlations with other variables in the dataset to calculate if missingness is related to the other variables. 
+
+
+
+```{r, fig.width = 7, fig.height= 7}
+
+gbtools:::plot_missing_correlations(mtcars_missing)
+
+```
+
+To illustrate what this is doing, consider the correlation highlighted in orange above. 
+
+This represents the pairwise correlation between missingness in mpg and drat.
+
+
+```{r}
+
+cor.test(as.numeric(is.na(mtcars_missing$mpg)), mtcars_missing$drat)
+
+
+```
+
+rmarkdown::render("README.Rmd", output_format = "html_document")
+By default, only correlations with p < .05 are highlighted. 
+
+Changing the p-value threshold to NULL or 1 will avoid thresholding. 
+
+
+```{r, fig.width = 7, fig.height= 7}
+
+gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1)
+
+```
+
+This function is still in development, and will likely change over time. 

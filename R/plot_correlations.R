@@ -3,19 +3,21 @@
 #'
 #' @description
 #'
-#' The function provides a wrapper around ggplot2 to quickly create a correlation matrix.
+#' The function provides a wrapper around ggplot2 to easily create a correlation matrix.
 #'
-#' @param dat Input dataframe or matrix (*do not input a correlation matrix*).
-#' @param variable_labels Character vector of variable Labels, corresponding to each column in dat. If missing (NULL) then colnames(dat) will be used.
-#' @param textadjust Scalar. Adjust text size by a magnification factor.
-#' @param sample_size Logical. Include sample size on upper diagononal (TRUE) or leave blank (FALSE).
-#' @param confidence_interval Logical. Include confidence interval on upper diagonal (TRUE) or leave blank (FALSE).
-#' @param low_colour Logical. Hex colour code for the lowest correlation.
-#' @param high_colour Logical. Hex colour code for the highest correlation.
-#' @param abs_colour Logical. If TRUE, will use the absolute correlation (i.e. ignoring whether the correlation is positive or negative) for determining square colour.
-#' @param n_decimal_places How many decimal places to use for plotting
+#' @param dat A dataframe or matrix for which to compute correlations. Note: A correlation matrix should not be provided as input.
+#' @param variable_labels A character vector of labels for each variable (i.e., each column in `dat`). If missing (NULL), column names from `dat` are used.
+#' @param textadjust A scalar that adjusts text size by a specific magnification factor.
+#' @param sample_size Logical. If TRUE, the function includes sample sizes on the upper diagonal. If FALSE, these are left blank.
+#' @param confidence_interval Logical. If TRUE, the function includes confidence intervals on the upper diagonal. If FALSE, these are left blank.
+#' @param low_colour Hex colour code for the lowest correlation value.
+#' @param high_colour Hex colour code for the highest correlation value.
+#' @param mid_colour Hex colour code for the middle point in the correlation scale.
+#' @param abs_colour Logical. If TRUE, absolute correlation values (i.e., ignoring positive/negative status) are used for determining square colours.
+#' @param cluster_variables Logical. If TRUE, variables are clustered in the plot. Default is FALSE.
+#' @param n_decimal_places The number of decimal places to use for plot text.
 #'
-#' @return ggplot
+#' @return A ggplot object of the correlation matrix.
 #'
 #' @examples
 #' X = sapply(1:10, function(i) rnorm(100))
@@ -41,6 +43,7 @@ plot_correlations = function(dat,
 ){
   if (!base::is.data.frame(dat)) {dat=base::as.data.frame(dat)}
 
+  # Cluster Variables
   if (cluster_variables) {
     new_order = gbtools:::.sortVar(dat)
     dat = dat[,new_order]
@@ -49,61 +52,62 @@ plot_correlations = function(dat,
     }
   }
 
+  # Set Variable Names
   Variables = base::colnames(dat)
   if(is.null(variable_labels)){
     variable_labels = base::colnames(dat)
   }
 
+  # Estimate Correlation Matrix
   matrix_scores = dat
-  Mat_Cor = cor(matrix_scores, use="pairwise.complete.obs")
-  Mat_Cor = apply(Mat_Cor, 2, gbtools::apa_num)
-  # Mat_Cor = matrix(sprintf(paste0("%.",n_decimal_places,"f"), Mat_Cor), ncol = ncol(Mat_Cor))
-  # Mat_Cor = apply(Mat_Cor,2, function(x) gsub("^(-?)0+\\.", "\\1.",x))
+  correlation_matrix_vals = stats::cor(matrix_scores, use="pairwise.complete.obs")
+  correlation_matrix_text_vals = apply(correlation_matrix_vals, 2, gbtools::apa_num)
 
+  # Calculate Fill colors
   if(abs_colour){
-    Mat_Cor_fill = base::abs(stats::cor(matrix_scores, use="pairwise.complete.obs"))  #Correlation matrix for table fill
+    correlation_matrix_fill = base::abs(correlation_matrix_vals)  #Correlation matrix for table fill
   } else {
-    Mat_Cor_fill = (stats::cor(matrix_scores, use="pairwise.complete.obs"))  #Correlation matrix for table fill
+    correlation_matrix_fill = (correlation_matrix_vals)  #Correlation matrix for table fill
   }
 
-  Mat_Cor_fill[base::lower.tri(Mat_Cor_fill,diag = TRUE)]=NA
+  correlation_matrix_fill[base::lower.tri(correlation_matrix_fill,diag = TRUE)]=NA
 
   #Matrix on Ns per comparison - lower triag
-  Mat_N = sapply(Variables, function(x)
+  sample_size_matrix = sapply(Variables, function(x)
     sapply(Variables, function(y)
       base::nrow(stats::na.omit(base::data.frame(dat[,base::unique(c(x,y))])))
     ))
 
   #Confidence interval information
   if(confidence_interval){
-    Mat_CI = sapply(Variables, function(x)
+    correlation_matrix_conf_int = sapply(Variables, function(x)
       sapply(Variables, function(y)
         gbtools:::.R_ConInt(as.numeric(dat[,x]),base::as.numeric(dat[,y]), n_decimal_places = n_decimal_places)$CI
       ))
-    base::diag(Mat_CI) = base::diag(Mat_N)
-    Mat_N = Mat_CI
+    base::diag(correlation_matrix_conf_int) = base::diag(sample_size_matrix)
+    sample_size_matrix = correlation_matrix_conf_int
   }
 
   #Create Dataframe For ggplot to Read
-  PlotMat = Mat_Cor
+
+  data_to_plot = correlation_matrix_text_vals
   if(sample_size){
-    PlotMat[base::lower.tri(PlotMat, diag=TRUE)]=Mat_N[base::lower.tri(Mat_N, diag=TRUE)]
+    data_to_plot[base::lower.tri(data_to_plot, diag=TRUE)]=sample_size_matrix[base::lower.tri(sample_size_matrix, diag=TRUE)]
   }
   if(!sample_size){
-    PlotMat[base::lower.tri(PlotMat, diag=TRUE)]=""
+    data_to_plot[base::lower.tri(data_to_plot, diag=TRUE)]=""
   }
-  base::colnames(PlotMat) = variable_labels ;  base::rownames(PlotMat) = variable_labels
 
-  PlotMat = base::data.frame(reshape2::melt(PlotMat), stringsAsFactors = FALSE)
-  head(PlotMat)
+  base::colnames(data_to_plot) = variable_labels ;  base::rownames(data_to_plot) = variable_labels
 
-  PlotMat$value = (base::as.character(PlotMat$value))
-  PlotMat$ValueFill = base::as.numeric(t(c(Mat_Cor_fill)))
-  PlotMat$Var2 = base::factor(PlotMat$Var2, levels=rev(base::levels(PlotMat$Var2)))
+  data_to_plot = base::data.frame(reshape2::melt(data_to_plot), stringsAsFactors = FALSE)
 
+  data_to_plot$value = (base::as.character(data_to_plot$value))
+  data_to_plot$ValueFill = base::as.numeric(t(c(correlation_matrix_fill)))
+  data_to_plot$Var2 = base::factor(data_to_plot$Var2, levels=rev(base::levels(data_to_plot$Var2)))
 
-  OutPlot =
-    ggplot2::ggplot(data = PlotMat, ggplot2::aes(x=Var1, y=Var2,fill=ValueFill))+# + geom_point(aes(size=value^2,alpha=value^4))+
+  output_plot =
+    ggplot2::ggplot(data = data_to_plot, ggplot2::aes(x=Var1, y=Var2,fill=ValueFill))+# + geom_point(aes(size=value^2,alpha=value^4))+
     ggplot2::geom_tile() + ggplot2::labs(x=NULL, y=NULL) +
     ggplot2::theme(axis.text = ggplot2::element_text(size=5*textadjust)) +
     ggplot2::geom_text(ggplot2::aes(label=value), size=1.4*textadjust) +
@@ -115,7 +119,7 @@ plot_correlations = function(dat,
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,hjust=1)) +
     ggplot2::coord_fixed()
 
-  OutPlot
+  output_plot
 
-  return(OutPlot)
+  return(output_plot)
 }

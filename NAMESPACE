@@ -3,3 +3,4 @@
 export(apa_num)
 export(map_normal)
 export(plot_correlations)
+export(plot_missing_correlations)

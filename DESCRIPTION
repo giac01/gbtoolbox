@@ -4,8 +4,8 @@ Title: Some handy R tools
 Version: 0.0.1
 Author: Giacomo Bignardi
 Maintainer: Giacomo Bignardi <bignardig@outlook.com>
-Description: Assortment of handy R functions
-License: MIT + file LICENSE
+Description: Assortment of handy R functions. This package is still a very early beta so please use function with caution. 
+License: MIT + file LICENSE.md
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
@@ -21,4 +21,7 @@ Exports:
     plot_correlations,
     apa_numdevtools
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat
+VignetteBuilder: knitr

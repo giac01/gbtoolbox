@@ -133,7 +133,45 @@ recode_check = function(x, input, output, verbose = TRUE){
 
 }
 
+# Correlation Missingness Calculaton -------------------------------------------
 
+missingness_correlations = function(dat){
+  # input data
+
+  # matrix of missingness (1 = missing, 0 = not missing)
+  dat_missing = apply(dat, 2, function(x) as.numeric(is.na(x)))
+
+  vars = colnames(dat)
+
+  missingness_cors =
+  sapply(vars, function(v_1)
+    sapply(vars, function(v_2)
+      suppressWarnings(
+        cor(
+            dat_missing[,v_2],
+            dat[,v_1],
+            use = "pairwise.complete.obs"))
+      )
+    )
+
+
+  missingness_cors_pvals =
+    sapply(vars, function(v_1)
+      sapply(vars, function(v_2)
+        suppressWarnings(
+          cor.test(
+            dat_missing[,v_2],
+            dat[,v_1],
+            use = "pairwise.complete.obs")$p.value)
+      )
+    )
+
+
+
+
+  output = list("cor" = missingness_cors, "p.value" = missingness_cors_pvals)
+  return(output)
+}
 
 
 
