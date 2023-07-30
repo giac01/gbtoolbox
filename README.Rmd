@@ -1,6 +1,6 @@
 ---
 title: "gbtools README"
-output: rmarkdown::html
+output: github_document
 ---
 
 
