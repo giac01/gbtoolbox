@@ -11,7 +11,9 @@ This vignette provides an overview of the plot_correlations and plot_missing_cor
 The package is only available on github. To download, run the following:
 
 ```{r res, include=FALSE}
-knitr::opts_chunk$set(dpi = 600)
+knitr::opts_chunk$set(dpi = 400)
+
+# rmarkdown::render(input = "README.Rmd", output_format = "github_document")
 
 ```
 
@@ -19,7 +21,7 @@ knitr::opts_chunk$set(dpi = 600)
 
 # install.packages("devtools")
 
-devtools::install_github("giac01/gbtools")
+# devtools::install_github("giac01/gbtools")
 
 library(gbtools)
 ```
