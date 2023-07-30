@@ -35,7 +35,8 @@ plot_missing_correlations(
 
 \item{set_colour_to_p_value}{Logical. If TRUE, will set the colour to p-value.}
 
-\item{cluster_variables}{Logical. If TRUE, clusters the variables on the plot. This also moves data with no missing observations to the bottom.}
+\item{cluster_variables}{Logical. If TRUE, clusters the variables on the plot.
+This also moves data with no missing observations to the bottom.}
 
 \item{n_decimal_places}{Number of decimal places to use for plotting.}
 

@@ -16,6 +16,7 @@
 #' @param abs_colour Logical. If TRUE, absolute correlation values (i.e., ignoring positive/negative status) are used for determining square colours.
 #' @param cluster_variables Logical. If TRUE, variables are clustered in the plot. Default is FALSE.
 #' @param n_decimal_places The number of decimal places to use for plot text.
+#' @param suppress_warning_message Logical. If TRUE, suppresses warning message about the function being in beta.
 #'
 #' @return A ggplot object of the correlation matrix.
 #'
@@ -26,7 +27,8 @@
 #'
 #' plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
 #'
-#' plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) + ggplot2::labs(title = "My Title")
+#' plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) +
+#' ggplot2::labs(title = "My Title")
 #' @export
 #'
 plot_correlations = function(dat,
@@ -39,8 +41,12 @@ plot_correlations = function(dat,
                    mid_colour="white",
                    abs_colour=TRUE,
                    cluster_variables = FALSE,
-                   n_decimal_places = 2
+                   n_decimal_places = 2,
+                   suppress_warning_message = FALSE
 ){
+  if (!suppress_warning_message) {warning("This function is in development, and not yet ready for widespread use. \n  Proceed with caution")}
+
+
   if (!base::is.data.frame(dat)) {dat=base::as.data.frame(dat)}
 
   # Cluster Variables

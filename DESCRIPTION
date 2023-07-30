@@ -5,7 +5,7 @@ Version: 0.0.1
 Author: Giacomo Bignardi
 Maintainer: Giacomo Bignardi <bignardig@outlook.com>
 Description: Assortment of handy R functions. This package is still a very early beta so please use function with caution. 
-License: MIT + file LICENSE.md
+License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
@@ -19,7 +19,9 @@ Imports:
 Exports:
     map_normal,
     plot_correlations,
-    apa_numdevtools
+    apa_numdevtools,
+    plot_pairwise_missing,
+    plot_missing_correlations
 Suggests: 
     knitr,
     rmarkdown,

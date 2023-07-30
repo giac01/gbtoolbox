@@ -12,7 +12,8 @@
 #' @param mid_colour Hex colour code for the midpoint of the correlation.
 #' @param abs_colour Logical. If TRUE, will use the absolute correlation for determining square colour.
 #' @param set_colour_to_p_value Logical. If TRUE, will set the colour to p-value.
-#' @param cluster_variables Logical. If TRUE, clusters the variables on the plot. This also moves data with no missing observations to the bottom.
+#' @param cluster_variables Logical. If TRUE, clusters the variables on the plot.
+#' This also moves data with no missing observations to the bottom.
 #' @param n_decimal_places Number of decimal places to use for plotting.
 #' @param suppress_warning_message Logical. If TRUE, suppresses warning message about the function being in beta.
 #' @return A ggplot object showing how missingness in variables is correlated with other variables.
@@ -39,8 +40,7 @@ plot_missing_correlations = function(dat,
                              n_decimal_places = 3,
                              suppress_warning_message = FALSE
 ){
-  if (!suppress_warning_message) {warning("Warning: this function is in very early beta, and not designed for widespread use. \n  Proceed with caution")}
-
+  if (!suppress_warning_message) {warning("This function is in early beta, and not yet ready for widespread use. \n  Proceed with caution")}
 
   if (!base::is.data.frame(dat)) {dat=base::as.data.frame(dat)}
 
@@ -99,7 +99,6 @@ plot_missing_correlations = function(dat,
   if (!is.null(p_threshold_col)){
     data_to_plot_pval = base::data.frame(reshape2::melt(correlation_matrix_pvals), stringsAsFactors = FALSE)
     data_to_plot$ValueFill[data_to_plot_pval$value>p_threshold_col] = NA
-
   }
 
   # data_to_plot = data_to_plot[!(data_to_plot$Var1 %in% exclude_var),]

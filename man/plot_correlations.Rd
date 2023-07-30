@@ -15,7 +15,8 @@ plot_correlations(
   mid_colour = "white",
   abs_colour = TRUE,
   cluster_variables = FALSE,
-  n_decimal_places = 2
+  n_decimal_places = 2,
+  suppress_warning_message = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ plot_correlations(
 \item{cluster_variables}{Logical. If TRUE, variables are clustered in the plot. Default is FALSE.}
 
 \item{n_decimal_places}{The number of decimal places to use for plot text.}
+
+\item{suppress_warning_message}{Logical. If TRUE, suppresses warning message about the function being in beta.}
 }
 \value{
 A ggplot object of the correlation matrix.
@@ -54,5 +57,6 @@ My_Labels = c(paste0("Predictor ",1:5), paste0("Outcome ",1:5))
 
 plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
 
-plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) + ggplot2::labs(title = "My Title")
+plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) +
+ggplot2::labs(title = "My Title")
 }

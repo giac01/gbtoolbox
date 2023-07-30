@@ -107,7 +107,7 @@
     CI = stats::cor.test(x,y)$conf.int[1:2]
     # CI = base::gsub("^\\s","",gsub("0\\.", "\\.",round(CI, digits=n_decimal_places)))
     CI = gbtools::apa_num(CI)
-    N = base::as.numeric(cor.test(x,y)$parameter + 2)
+    N = base::as.numeric(stats::cor.test(x,y)$parameter + 2)
     CI_l =     base::paste0( "[",CI[1],", ",CI[2],"]", sep="")
     out =    base::paste0(N,"\n[",CI[1],", ",CI[2],"]", sep="")
     return(list(CI=out, N=N, CI_l=CI_l))
@@ -147,7 +147,7 @@ missingness_correlations = function(dat){
   sapply(vars, function(v_1)
     sapply(vars, function(v_2)
       suppressWarnings(
-        cor(
+        stats::cor(
             dat_missing[,v_2],
             dat[,v_1],
             use = "pairwise.complete.obs"))
@@ -159,7 +159,7 @@ missingness_correlations = function(dat){
     sapply(vars, function(v_1)
       sapply(vars, function(v_2)
         suppressWarnings(
-          cor.test(
+          stats::cor.test(
             dat_missing[,v_2],
             dat[,v_1],
             use = "pairwise.complete.obs")$p.value)
