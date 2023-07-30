@@ -44,12 +44,12 @@ as shown below.
 
 ``` r
 plot_correlations(mtcars_missing, textadjust = 1.7, suppress_warning_message = TRUE) + 
-  ggplot2::labs(title = "Example plot_correlations",
+  ggplot2::labs(title = "plot_correlations(...)",
                 subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
                                           )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## plot_missing_correlations(…)
 
@@ -63,10 +63,11 @@ with other variables in the dataset to calculate if missingness is
 related to the other variables.
 
 ``` r
-gbtools:::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE)
+gbtools:::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE) + 
+  ggplot2::labs(title = "plot_missing_correlations(...)")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 To illustrate what this is doing, consider the correlation highlighted
 in orange above.
@@ -75,7 +76,7 @@ This represents the pairwise correlation between missingness in mpg and
 drat.
 
 ``` r
-cor.test(as.numeric(is.na(mtcars_missing$mpg)), mtcars_missing$drat)
+cor.test(as.numeric(is.na(mtcars_missing$mpg)), mtcars_missing$drat) 
 ```
 
     ## 
@@ -95,10 +96,11 @@ By default, only correlations with *p \< .05* are highlighted.
 Changing the p-value threshold to NULL or 1 will avoid thresholding.
 
 ``` r
-gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1, suppress_warning_message = TRUE)
+gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1, suppress_warning_message = TRUE) +
+  ggplot2::labs(title = "plot_missing_correlations(...)")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 This function is still in development, and will likely change over time.
 
@@ -111,7 +113,8 @@ The lower diagonal shows the number of cases where rows are not missing
 for a given pair of variables.
 
 ``` r
-gbtools:::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE)
+gbtools:::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE) + 
+  ggplot2::labs(title = "plot_pairwise_missing(...)")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->

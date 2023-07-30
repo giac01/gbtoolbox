@@ -51,7 +51,7 @@ You can combine standard ggplot2 commands with plot_correlation function as show
 ```{r, fig.width = 6, fig.height= 6}
 
 plot_correlations(mtcars_missing, textadjust = 1.7, suppress_warning_message = TRUE) + 
-  ggplot2::labs(title = "Example plot_correlations",
+  ggplot2::labs(title = "plot_correlations(...)",
                 subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
                                           )
 
@@ -65,7 +65,8 @@ We transform each variable with missing data (in this case, only hp, mpg, drat, 
 
 ```{r, fig.width = 6, fig.height= 6}
 
-gbtools:::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE)
+gbtools:::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE) + 
+  ggplot2::labs(title = "plot_missing_correlations(...)")
 
 ```
 
@@ -75,7 +76,7 @@ This represents the pairwise correlation between missingness in mpg and drat.
 
 ```{r}
 
-cor.test(as.numeric(is.na(mtcars_missing$mpg)), mtcars_missing$drat)
+cor.test(as.numeric(is.na(mtcars_missing$mpg)), mtcars_missing$drat) 
 
 
 ```
@@ -86,7 +87,8 @@ Changing the p-value threshold to NULL or 1 will avoid thresholding.
 
 ```{r, fig.width = 6, fig.height= 6}
 
-gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1, suppress_warning_message = TRUE)
+gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1, suppress_warning_message = TRUE) +
+  ggplot2::labs(title = "plot_missing_correlations(...)")
 
 ```
 
@@ -100,7 +102,8 @@ The lower diagonal shows the number of cases where rows are not missing for a gi
 
 ```{r, fig.width = 6, fig.height= 6}
 
-gbtools:::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE)
+gbtools:::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE) + 
+  ggplot2::labs(title = "plot_pairwise_missing(...)")
 
 ```
 
