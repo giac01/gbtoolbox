@@ -49,7 +49,7 @@ plot_correlations(mtcars_missing, textadjust = 1.7, suppress_warning_message = T
                                           )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ## plot_missing_correlations(…)
 
@@ -66,7 +66,7 @@ related to the other variables.
 gbtools:::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 To illustrate what this is doing, consider the correlation highlighted
 in orange above.
@@ -98,7 +98,7 @@ Changing the p-value threshold to NULL or 1 will avoid thresholding.
 gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1, suppress_warning_message = TRUE)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 This function is still in development, and will likely change over time.
 
@@ -114,4 +114,4 @@ for a given pair of variables.
 gbtools:::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
