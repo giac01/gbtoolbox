@@ -15,39 +15,8 @@ The package is only available on github. To download, run the following:
 ``` r
 # install.packages("devtools")
 
-devtools::install_github("giac01/gbtools")
-```
+# devtools::install_github("giac01/gbtools")
 
-    ## Downloading GitHub repo giac01/gbtools@HEAD
-
-    ## These packages have more recent versions available.
-    ## It is recommended to update all of them.
-    ## Which would you like to update?
-    ## 
-    ## 1: All                             
-    ## 2: CRAN packages only              
-    ## 3: None                            
-    ## 4: Rcpp   (1.0.10 -> 1.0.11) [CRAN]
-    ## 5: digest (0.6.32 -> 0.6.33) [CRAN]
-    ## 
-    ## ── R CMD build ────────────────────────────────────────────────────────────────────────────────────────────────────────────
-    ##      checking for file ‘/tmp/Rtmp1xMcwS/remotes39875d14fd55/giac01-gbtools-b9bfcda/DESCRIPTION’ ...  ✔  checking for file ‘/tmp/Rtmp1xMcwS/remotes39875d14fd55/giac01-gbtools-b9bfcda/DESCRIPTION’
-    ##   ─  preparing ‘gbtools’:
-    ##    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-    ##   ─  excluding invalid files
-    ##      Subdirectory 'R' contains invalid file names:
-    ##      ‘ignore.test’
-    ##   ─  checking for LF line-endings in source and make files and shell scripts
-    ##   ─  checking for empty or unneeded directories
-    ##    Omitted ‘LazyData’ from DESCRIPTION
-    ##   ─  building ‘gbtools_0.0.1.tar.gz’
-    ##      
-    ## 
-
-    ## Installing package into '/usr/local/lib/R/site-library'
-    ## (as 'lib' is unspecified)
-
-``` r
 library(gbtools)
 ```
 

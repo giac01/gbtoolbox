@@ -11,7 +11,7 @@ This vignette provides an overview of the plot_correlations and plot_missing_cor
 The package is only available on github. To download, run the following:
 
 ```{r res, include=FALSE}
-knitr::opts_chunk$set(dpi = 400)
+knitr::opts_chunk$set(dpi = 600)
 
 # rmarkdown::render(input = "README.Rmd", output_format = "github_document")
 
@@ -48,7 +48,7 @@ mtcars_missing = data.frame(mtcars_missing)
 
 You can combine standard ggplot2 commands with plot_correlation function as shown below.
 
-```{r, fig.width = 6, fig.height= 6}
+```{r, fig.width = 5, fig.height= 5}
 
 plot_correlations(mtcars_missing) + ggplot2::labs(title = "Example plot_correlations",
                                           subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
