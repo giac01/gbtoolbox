@@ -32,13 +32,3 @@ A ggplot object of the correlation matrix.
 \description{
 The function provides a wrapper around ggplot2 to easily create a paired sample size matrix
 }
-\examples{
-X = sapply(1:10, function(i) rnorm(100))
-X = as.data.frame(X)
-My_Labels = c(paste0("Predictor ",1:5), paste0("Outcome ",1:5))
-
-plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
-
-plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) +
-ggplot2::labs(title = "My Title")
-}

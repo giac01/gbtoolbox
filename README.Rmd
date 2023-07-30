@@ -44,19 +44,20 @@ mtcars_missing = data.frame(mtcars_missing)
 
 ```
 
-## plot_correlation function
+## plot_correlations(...)
 
 You can combine standard ggplot2 commands with plot_correlation function as shown below.
 
-```{r, fig.width = 5, fig.height= 5}
+```{r, fig.width = 6, fig.height= 6}
 
-plot_correlations(mtcars_missing) + ggplot2::labs(title = "Example plot_correlations",
-                                          subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
+plot_correlations(mtcars_missing, textadjust = 1.7) + 
+  ggplot2::labs(title = "Example plot_correlations",
+                subtitle = "Lower Diagonal: correlations\nDiagonal: # non-missing observations for each variable\nUpper Diagonal: sample size for pairwise correlations and 95% CI"
                                           )
 
 ```
 
-## plot_missing_correlations function
+## plot_missing_correlations(...)
 
 plot_missing_correlations visualises how missingness in your dataset is correlated with other variables in your dataset.
 
@@ -91,7 +92,7 @@ gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1)
 
 This function is still in development, and will likely change over time.
 
-## Plot Pairwise Missingness
+## plot_pairwise_missing(...)
 
 The diagonal shows the number of non-missing observations for each variable
 
