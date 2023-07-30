@@ -10,6 +10,11 @@ This vignette provides an overview of the plot_correlations and plot_missing_cor
 
 The package is only available on github. To download, run the following:
 
+```{r res, include=FALSE}
+knitr::opts_chunk$set(dpi = 600)
+
+```
+
 ```{r setup}
 
 # install.packages("devtools")
@@ -84,7 +89,11 @@ gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1)
 
 This function is still in development, and will likely change over time.
 
-## plot
+## Plot Pairwise Missingness
+
+The diagonal shows the number of non-missing observations for each variable
+
+The lower diagonal shows the number of cases where rows are not missing for a given pair of variables. 
 
 ```{r, fig.width = 6, fig.height= 6}
 
