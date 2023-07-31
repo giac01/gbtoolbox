@@ -51,7 +51,7 @@ plot_correlations = function(dat,
 
   # Cluster Variables
   if (cluster_variables) {
-    new_order = gbtools:::.sortVar(dat)
+    new_order = gbtoolbox:::.sortVar(dat)
     dat = dat[,new_order]
     if (!base::is.null(variable_labels)){
       variable_labels = variable_labels[new_order]
@@ -67,7 +67,7 @@ plot_correlations = function(dat,
   # Estimate Correlation Matrix
   matrix_scores = dat
   correlation_matrix_vals = stats::cor(matrix_scores, use="pairwise.complete.obs")
-  correlation_matrix_text_vals = apply(correlation_matrix_vals, 2, gbtools::apa_num)
+  correlation_matrix_text_vals = apply(correlation_matrix_vals, 2, gbtoolbox::apa_num)
 
   # Calculate Fill colors
   if(abs_colour){
@@ -88,7 +88,7 @@ plot_correlations = function(dat,
   if(confidence_interval){
     correlation_matrix_conf_int = sapply(Variables, function(x)
       sapply(Variables, function(y)
-        gbtools:::.R_ConInt(as.numeric(dat[,x]),base::as.numeric(dat[,y]), n_decimal_places = n_decimal_places)$CI
+        gbtoolbox:::.R_ConInt(as.numeric(dat[,x]),base::as.numeric(dat[,y]), n_decimal_places = n_decimal_places)$CI
       ))
     base::diag(correlation_matrix_conf_int) = base::diag(sample_size_matrix)
     sample_size_matrix = correlation_matrix_conf_int

@@ -1,13 +1,14 @@
 rm(list=ls(all.names = TRUE))
 devtools::load_all()
-
+set.seed(10)
 n <- 1000
 df <- data.frame(
   age = rnorm(n, 50, 10),
   income = rnorm(n, 50000, 15000),
   satisfaction = runif(n, 1, 5),
   education = rnorm(n, 16, 2),
-  health = runif(n, 0, 1)
+  health = runif(n, 0, 1),
+  employment = rep(NA, n)
 )
 
 # Define a logistic function to create a probability of missingness

@@ -81,6 +81,16 @@
   return(base::list(CI=CI,p=p))
 }
 
+# Pearson Correlation P-value Calculator  --------------------------
+
+.correlation_pvalue = function(r, n, alpha=0.05){
+  Fr = base::atanh(r)                 # Fisher Z Transform
+  SE = 1/((n-3)^.5)             # Standard Error
+  t = r*base::sqrt((n-2)/(1-r^2))       # P-value estimated from t-distribution
+  p  = (1-stats::pt(base::abs(t), df=n-2))*2
+  return(p)
+}
+
 
 # Sort variables ---------------------------------------------------------------
 
@@ -89,9 +99,16 @@
 
   cormat = 1 - base::abs(stats::cor(dat, use="pairwise.complete.obs"))
   cormat = stats::as.dist(cormat)
-  clustres = stats::hclust(cormat)
 
-  return(clustres$order)
+  if(length(which(is.na(c(t(cormat)))))>0){
+    warning("Clustering failed due to an NA in the correlation matrix. Clustering not used. \nCheck stats::cor(your_data, use=`pairwise.complete.obs`)\nOr set cluster_variables = FALSE")
+    clustres_order = 1:ncol(dat)
+  } else {
+    clustres = stats::hclust(cormat)
+    clustres_order = clustres$order
+  }
+
+  return(clustres_order)
 }
 
 
@@ -106,7 +123,7 @@
   } else {
     CI = stats::cor.test(x,y)$conf.int[1:2]
     # CI = base::gsub("^\\s","",gsub("0\\.", "\\.",round(CI, digits=n_decimal_places)))
-    CI = gbtools::apa_num(CI)
+    CI = gbtoolbox::apa_num(CI)
     N = base::as.numeric(stats::cor.test(x,y)$parameter + 2)
     CI_l =     base::paste0( "[",CI[1],", ",CI[2],"]", sep="")
     out =    base::paste0(N,"\n[",CI[1],", ",CI[2],"]", sep="")
@@ -154,26 +171,20 @@ missingness_correlations = function(dat){
       )
     )
 
-
-  missingness_cors_pvals =
-    sapply(vars, function(v_1)
-      sapply(vars, function(v_2)
-        suppressWarnings(
-          stats::cor.test(
-            dat_missing[,v_2],
-            dat[,v_1],
-            use = "pairwise.complete.obs")$p.value)
-      )
-    )
+  sample_size_matrix = sapply(vars, function(x)
+    sapply(vars, function(y)
+      base::nrow(stats::na.omit(base::data.frame(dat[,base::unique(c(x,y))])))
+    ))
 
 
+  missingness_cors_pvals = sapply(seq_along(vars) ,function(r)
+    sapply(seq_along(vars), function(c)
+      .correlation_pvalue(r = missingness_cors[r,c], n = sample_size_matrix[r,c])
+    ))
 
-
-  output = list("cor" = missingness_cors, "p.value" = missingness_cors_pvals)
+  output = list("cor" = missingness_cors, "p.value" = missingness_cors_pvals,
+                "sample.size" = sample_size_matrix)
   return(output)
 }
-
-
-
 
 

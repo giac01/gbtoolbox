@@ -1,8 +1,8 @@
-gbtools README
+gbtoolbox README
 ================
 
 This vignette provides an overview of the plot_correlations and
-plot_missing_correlations functions from the gbtools R package. These
+plot_missing_correlations functions from the gbtoolbox R package. These
 functions are designed to visualize correlation matrices and explore
 missing data correlations within a dataset. We’ll demonstrate how to use
 these functions with example data and explain the insights they can
@@ -15,9 +15,9 @@ The package is only available on github. To download, run the following:
 ``` r
 # install.packages("devtools")
 
-# devtools::install_github("giac01/gbtools")
+# devtools::install_github("giac01/gbtoolbox")
 
-library(gbtools)
+library(gbtoolbox)
 ```
 
 ## Example Data
@@ -63,7 +63,7 @@ with other variables in the dataset to calculate if missingness is
 related to the other variables.
 
 ``` r
-gbtools:::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE) + 
+gbtoolbox:::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE) + 
   ggplot2::labs(title = "plot_missing_correlations(...)")
 ```
 
@@ -96,7 +96,7 @@ By default, only correlations with *p \< .05* are highlighted.
 Changing the p-value threshold to NULL or 1 will avoid thresholding.
 
 ``` r
-gbtools:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1, suppress_warning_message = TRUE) +
+gbtoolbox:::plot_missing_correlations(mtcars_missing, p_threshold_col = 1, suppress_warning_message = TRUE) +
   ggplot2::labs(title = "plot_missing_correlations(...)")
 ```
 
@@ -113,7 +113,7 @@ The lower diagonal shows the number of cases where rows are not missing
 for a given pair of variables.
 
 ``` r
-gbtools:::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE) + 
+gbtoolbox:::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE) + 
   ggplot2::labs(title = "plot_pairwise_missing(...)")
 ```
 

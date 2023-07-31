@@ -31,7 +31,7 @@ plot_pairwise_missing = function(dat,
 
   # Cluster Variables
   if (cluster_variables) {
-    new_order = gbtools:::.sortVar(dat)
+    new_order = gbtoolbox:::.sortVar(dat)
     dat = dat[,new_order]
   }
 

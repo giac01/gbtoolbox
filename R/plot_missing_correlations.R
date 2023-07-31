@@ -40,12 +40,13 @@ plot_missing_correlations = function(dat,
                              n_decimal_places = 3,
                              suppress_warning_message = FALSE
 ){
+  # browser()
   if (!suppress_warning_message) {warning("This function is in early beta, and not yet ready for widespread use. \n  Proceed with caution")}
 
   if (!base::is.data.frame(dat)) {dat=base::as.data.frame(dat)}
 
   # Estimate Missingness correlations and p-values
-  missingness_results      = gbtools:::missingness_correlations(dat)
+  missingness_results      = gbtoolbox:::missingness_correlations(dat)
   correlation_matrix_miss  = missingness_results$cor
   correlation_matrix_pvals = missingness_results$p.value
 
