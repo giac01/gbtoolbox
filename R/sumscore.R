@@ -1,20 +1,31 @@
 
-sumscore = function(df_input=df, vars = NULL, time = NULL, perc_missing_allowed=.2, recode_items = NULL, recode_function = NULL, plot_scores = TRUE){
+sumscore = function(df_input=NULL,
+                    vars = NULL,
+                    time = NULL,
+                    perc_missing_allowed=.2,
+                    recode_items = NULL,
+                    recode_function = NULL,
+                    # verbosity
+                    plot_scores = TRUE,
+                    print_tables = TRUE
+                    ){
 
-  perc_missing = apply(df, 1, function(x) length(which(is.na(x)))/length(x))
+  perc_missing = apply(df_input, 1, function(x) length(which(is.na(x)))/length(x))
 
-  print(table(perc_missing))
-  print(apply(df, 2,table))
-
-  if (!is.null(recode_items)){
-    df[recode_items] = apply(df[recode_items], 2, recode_function)
+  if (print_tables){
+    print(table(perc_missing))
+    print(apply(df_input, 2,table))
   }
 
-  item_loadings = stats::princomp(stats::cor(df, use = "pairwise.complete.obs"))$loadings[,1]
+  if (!is.null(recode_items)){
+    df_input[recode_items] = apply(df_input[recode_items], 2, recode_function)
+  }
 
-  if (length(which(item_loadings<0))>0){cat(c("\n\nError, negative items loadings:", which(item_loadings<0)))}
+  item_loadings = stats::princomp(stats::cor(df_input, use = "pairwise.complete.obs"))$loadings[,1]
 
-  scores = apply(df, 1, function(x) mean(x, na.rm=TRUE)*ncol(df))
+  if (length(which(item_loadings<0))>0){cat(c("\n\nError, negative items loadings:", which(item_loadings<0),"\n\n"))}
+
+  scores = apply(df_input, 1, function(x) mean(x, na.rm=TRUE)*ncol(df_input))
 
   scores[perc_missing>perc_missing_allowed] = NA
 
