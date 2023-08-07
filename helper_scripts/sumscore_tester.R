@@ -6,11 +6,11 @@ iris_test$Sepal.Length[sample(150, 20, replace = FALSE)] = NA
 ability = rnorm(100)
 df_test = sapply(1:10, function(x) ability + rnorm(100, mean = 10)) %>% as.matrix()
 df_test[,6] = df_test[,6]*-1
-# df_test[sample(nrow(df_test)*ncol(df_test), 100, replace = FALSE)] = NA
+df_test[sample(nrow(df_test)*ncol(df_test), 100, replace = FALSE)] = NA
 
 devtools::load_all()
 
-gbtoolbox:::sumscore(df_test, print_tables = FALSE, perc_missing_allowed = 1)
+gbtoolbox:::sumscore(df_test,  perc_missing_allowed = 1)
 
 
 gbtoolbox:::sumscore(df_test, print_tables = FALSE, perc_missing_allowed = 1)

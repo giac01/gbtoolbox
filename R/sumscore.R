@@ -7,15 +7,23 @@ sumscore = function(df_input=NULL,
                     recode_function = NULL,
                     # verbosity
                     plot_scores = TRUE,
-                    print_tables = TRUE
+                    print_missing_table = TRUE,
+                    print_missing_each_input_var = FALSE
                     ){
 
   perc_missing = apply(df_input, 1, function(x) length(which(is.na(x)))/length(x))
 
-  if (print_tables){
-    print(table(perc_missing))
-    print(apply(df_input, 2,table))
+  if (print_missing_table){
+    perc_missing_table =  table(perc_missing)
+    names(perc_missing_table) = gbtoolbox:::apa_num(as.numeric(names(perc_missing_table)))
+    cat("Percent missing on the calculated sumscore variable:\n")
+    print(perc_missing_table)
+    cat("\n")
   }
+
+
+  if (print_missing_each_input_var) print(apply(df_input, 2,table))
+
 
   if (!is.null(recode_items)){
     df_input[recode_items] = apply(df_input[recode_items], 2, recode_function)
