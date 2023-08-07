@@ -21,7 +21,8 @@ sumscore = function(df_input=NULL,
     df_input[recode_items] = apply(df_input[recode_items], 2, recode_function)
   }
 
-  item_loadings = stats::princomp(stats::cor(df_input, use = "pairwise.complete.obs"))$loadings[,1]
+  # item_loadings = stats::princomp(stats::cor(df_input, use = "pairwise.complete.obs"))$loadings[,1]
+  item_loadings = stats::loadings(stats::princomp(covmat = stats::cov(df_input, use = "pairwise.complete.obs"), fix_sign = TRUE, cor = TRUE, scores = FALSE) )[,1] # Need to check this later!
 
   if (length(which(item_loadings<0))>0){cat(c("\n\nError, negative items loadings:", which(item_loadings<0),"\n\n"))}
 
