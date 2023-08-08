@@ -10,7 +10,8 @@ plot_pairwise_missing(
   low_colour = "white",
   high_colour = "#0072B2",
   cluster_variables = FALSE,
-  suppress_warning_message = FALSE
+  suppress_warning_message = FALSE,
+  divisor = 1
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ plot_pairwise_missing(
 \item{cluster_variables}{Logical. If TRUE, variables are clustered in the plot. Default is FALSE.}
 
 \item{suppress_warning_message}{Logical. If TRUE, suppresses warning message about the function being in beta.}
+
+\item{divisor}{A scalar that is divided to each sample size cell (default = 1). Helpful plotting for very large sample sizes.}
 }
 \value{
 A ggplot object of the correlation matrix.

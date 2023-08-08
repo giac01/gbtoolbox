@@ -37,7 +37,10 @@ rm(logistic)
 
 dat = df
 
-gbtoolbox:::plot_pairwise_missing(dat)
+gbtoolbox:::plot_pairwise_missing(dat, divisor = 10)
+
+
+
 
 missingness_correlations(dat)$cor
 

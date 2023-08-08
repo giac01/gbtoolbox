@@ -11,6 +11,7 @@
 #' @param high_colour Hex colour code for the highest correlation value.
 #' @param cluster_variables Logical. If TRUE, variables are clustered in the plot. Default is FALSE.
 #' @param suppress_warning_message Logical. If TRUE, suppresses warning message about the function being in beta.
+#' @param divisor A scalar that is divided to each sample size cell (default = 1). Helpful plotting for very large sample sizes.
 #'
 #' @return A ggplot object of the correlation matrix.
 #'
@@ -21,7 +22,8 @@ plot_pairwise_missing = function(dat,
                              low_colour="white",
                              high_colour="#0072B2",
                              cluster_variables = FALSE,
-                             suppress_warning_message = FALSE
+                             suppress_warning_message = FALSE,
+                             divisor = 1
 ){
 
   if (!suppress_warning_message) {warning("This function is in early beta, and not yet ready for widespread use. \n  Proceed with caution")}
@@ -45,7 +47,16 @@ plot_pairwise_missing = function(dat,
       base::nrow(stats::na.omit(base::data.frame(dat[,base::unique(c(x,y))])))
     ))
 
+  # Divisor
+
+  sample_size_matrix = sample_size_matrix / divisor
+
+  sample_size_matrix = round(sample_size_matrix)
+
+  # Remove upper triangular
+
   sample_size_matrix[base::lower.tri(sample_size_matrix, diag = FALSE)] = ""
+
 
   # Calculate Fill Colors
 
