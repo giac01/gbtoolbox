@@ -1,5 +1,8 @@
 rm(list=ls(all.names = TRUE))
 devtools::load_all()
+
+# Test 1 -------------------------------------------------------------------------
+
 set.seed(10)
 n <- 1000
 df <- data.frame(
@@ -38,6 +41,29 @@ rm(logistic)
 dat = df
 
 gbtoolbox::plot_missing_correlations(dat)
+
+# Test 2 -----------------------------------------------------------------------
+
+
+iris_test = iris
+
+iris_test$Sepal.Length[sample(150, 20, replace = FALSE)] = NA
+iris_test$Sepal.Width[sample(150, 20, replace = FALSE)] = NA
+iris_test$Petal.Width[sample(150, 100, replace = FALSE)] = NA
+
+dat = iris_test[1:4]
+
+gbtoolbox::plot_missing_correlations(iris_test[1:4], p_threshold_col = .06)
+
+cor.test(as.numeric(is.na(iris_test$Sepal.Length)), iris_test$Sepal.Width)
+
+cor.test(as.numeric(is.na(iris_test$Sepal.Width)), iris_test$Petal.Width)
+
+
+
+# Other ------------------------------------------------------------------------
+
+
 
 missingness_correlations(dat)$cor
 

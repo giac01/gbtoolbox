@@ -1,7 +1,7 @@
 Package: gbtoolbox
 Type: Package
 Title: Some handy R tools
-Version: 0.0.2.2
+Version: 0.0.2.3
 Author: Giacomo Bignardi
 Maintainer: Giacomo Bignardi <bignardig@outlook.com>
 Description: Assortment of handy R functions. This package is still a very early beta so please use function with caution. 

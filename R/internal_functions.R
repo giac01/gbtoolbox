@@ -177,9 +177,9 @@ missingness_correlations = function(dat){
     ))
 
 
-  missingness_cors_pvals = sapply(seq_along(vars) ,function(r)
-    sapply(seq_along(vars), function(c)
-      .correlation_pvalue(r = missingness_cors[r,c], n = sample_size_matrix[r,c])
+  missingness_cors_pvals = sapply(seq_along(vars) ,function(c)
+    sapply(seq_along(vars), function(r)
+      .correlation_pvalue(r = missingness_cors[r,c], n = sample_size_matrix[c,c])
     ))
 
   output = list("cor" = missingness_cors, "p.value" = missingness_cors_pvals,
@@ -188,3 +188,6 @@ missingness_correlations = function(dat){
 }
 
 
+sapply(paste(1:10), function(x)
+   sapply( paste(letters[1:4]), function (y) paste(x,y)
+  ))
