@@ -65,9 +65,20 @@ plot_correlations = function(dat,
   }
 
   # Estimate Correlation Matrix
-  matrix_scores = dat
-  correlation_matrix_vals = stats::cor(matrix_scores, use="pairwise.complete.obs")
+  correlation_matrix_vals = stats::cor(dat, use="pairwise.complete.obs")
   correlation_matrix_text_vals = apply(correlation_matrix_vals, 2, gbtoolbox::apa_num)
+
+  #Matrix on Ns per comparison - lower triag
+  sample_size_matrix = sapply(Variables, function(x)
+    sapply(Variables, function(y)
+      base::nrow(stats::na.omit(base::data.frame(dat[,base::unique(c(x,y))])))
+    ))
+
+  # Estimate P-values
+  pvals = sapply(seq_along(Variables) ,function(c)
+    sapply(seq_along(Variables), function(r)
+      .correlation_pvalue(r = correlation_matrix_vals[r,c], n = sample_size_matrix[r,c])
+    ))
 
   # Calculate Fill colors
   if(abs_colour){
@@ -76,13 +87,10 @@ plot_correlations = function(dat,
     correlation_matrix_fill = (correlation_matrix_vals)  #Correlation matrix for table fill
   }
 
+
   correlation_matrix_fill[base::lower.tri(correlation_matrix_fill,diag = TRUE)]=NA
 
-  #Matrix on Ns per comparison - lower triag
-  sample_size_matrix = sapply(Variables, function(x)
-    sapply(Variables, function(y)
-      base::nrow(stats::na.omit(base::data.frame(dat[,base::unique(c(x,y))])))
-    ))
+
 
   #Confidence interval information
   if(confidence_interval){
