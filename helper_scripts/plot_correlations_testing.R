@@ -2,7 +2,7 @@ rm(list=ls(all.names = TRUE))
 devtools::load_all()
 
 dat = mtcars[,c(1,2,7:11)]
-# gbtoolbox:::plot_correlations(dat, abs_colour = FALSE)
+gbtoolbox:::plot_correlations(dat, abs_colour = FALSE,p_threshold_col = .00001)
 
 
 variable_labels=NULL
@@ -16,3 +16,4 @@ abs_colour=FALSE
 cluster_variables = FALSE
 n_decimal_places = 2
 suppress_warning_message = FALSE
+p_threshold_col = .05

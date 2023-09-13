@@ -9,6 +9,7 @@ plot_correlations(
   variable_labels = NULL,
   textadjust = 2,
   sample_size = TRUE,
+  p_threshold_col = NULL,
   confidence_interval = TRUE,
   low_colour = "#0072B2",
   high_colour = "#D55E00",
@@ -27,6 +28,8 @@ plot_correlations(
 \item{textadjust}{A scalar that adjusts text size by a specific magnification factor.}
 
 \item{sample_size}{Logical. If TRUE, the function includes sample sizes on the upper diagonal. If FALSE, these are left blank.}
+
+\item{p_threshold_col}{A numeric value indicating the p-value threshold for colouring.}
 
 \item{confidence_interval}{Logical. If TRUE, the function includes confidence intervals on the upper diagonal. If FALSE, these are left blank.}
 

@@ -9,6 +9,7 @@
 #' @param variable_labels A character vector of labels for each variable (i.e., each column in `dat`). If missing (NULL), column names from `dat` are used.
 #' @param textadjust A scalar that adjusts text size by a specific magnification factor.
 #' @param sample_size Logical. If TRUE, the function includes sample sizes on the upper diagonal. If FALSE, these are left blank.
+#' @param p_threshold_col A numeric value indicating the p-value threshold for colouring.
 #' @param confidence_interval Logical. If TRUE, the function includes confidence intervals on the upper diagonal. If FALSE, these are left blank.
 #' @param low_colour Hex colour code for the lowest correlation value.
 #' @param high_colour Hex colour code for the highest correlation value.
@@ -35,6 +36,7 @@ plot_correlations = function(dat,
                    variable_labels=NULL,
                    textadjust=2,
                    sample_size=TRUE,
+                   p_threshold_col = NULL,
                    confidence_interval=TRUE,
                    low_colour="#0072B2",
                    high_colour="#D55E00",
@@ -86,11 +88,10 @@ plot_correlations = function(dat,
   } else {
     correlation_matrix_fill = (correlation_matrix_vals)  #Correlation matrix for table fill
   }
-
-
+  if(!is.null(p_threshold_col)) {
+    correlation_matrix_fill[pvals > p_threshold_col] = NA
+  }
   correlation_matrix_fill[base::lower.tri(correlation_matrix_fill,diag = TRUE)]=NA
-
-
 
   #Confidence interval information
   if(confidence_interval){
