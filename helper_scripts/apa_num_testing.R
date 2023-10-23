@@ -6,3 +6,6 @@ devtools::load_all()
 x = c(1, .5, .213,-2134.124, -.123124,NA,"",4,2)
 apa_num(x, remove_leading_zeros = TRUE)
 
+apa_num("213")
+
+apa_num("NA")

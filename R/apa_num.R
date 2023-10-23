@@ -5,7 +5,9 @@
 #' the decimal point are also removed. It can optionally add a space before the decimal point for numbers
 #' less than 1 and greater than -1, without a leading 0 or - sign.
 #'
-#' @param x A numeric vector. These are the numbers to be formatted.
+#' Character inputs are converted to numeric using \code{as.numeric} before being formatted. Warnings regarding NAs introduced by coercion are suppressed.
+#'
+#' @param x A numeric or character vector. These are the numbers to be formatted.
 #' @param n_decimal_places An integer specifying the number of decimal places to round to. Default is 2.
 #' @param remove_leading_zeros A logical indicating whether to remove leading zeros. Default is TRUE.
 #' @param add_space_start A logical indicating whether to add a space before the decimal point for numbers
@@ -32,10 +34,16 @@ apa_num = function(x,
                    na_to_blank = TRUE,
                    blank_to_blank = TRUE
                    ){
+
+  suppressWarnings({
+    x = as.numeric(x)
+  })
+
   if (na_to_blank){ na_locations = which(is.na(x))}
   if (blank_to_blank){ blank_locations = which(x == "")}
 
-  x = as.character(sprintf(paste0("%.",n_decimal_places,"f"), as.numeric(x)))
+  x = as.character(sprintf(paste0("%.",n_decimal_places,"f"), x))
+
   if (remove_leading_zeros){ x = gsub("^(-?)0+\\.", "\\1.",x)}
   if (add_space_start){ x = gsub("^(\\.)", " \\1", x)}
 

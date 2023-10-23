@@ -8,11 +8,13 @@ apa_num(
   x,
   n_decimal_places = 2,
   remove_leading_zeros = TRUE,
-  add_space_start = TRUE
+  add_space_start = TRUE,
+  na_to_blank = TRUE,
+  blank_to_blank = TRUE
 )
 }
 \arguments{
-\item{x}{A numeric vector. These are the numbers to be formatted.}
+\item{x}{A numeric or character vector. These are the numbers to be formatted.}
 
 \item{n_decimal_places}{An integer specifying the number of decimal places to round to. Default is 2.}
 
@@ -20,6 +22,10 @@ apa_num(
 
 \item{add_space_start}{A logical indicating whether to add a space before the decimal point for numbers
 less than 1 and greater than -1, without a leading 0 or - sign. Default is TRUE.}
+
+\item{na_to_blank}{A logical indicating whether to convert NA values to blank strings. Default is TRUE.}
+
+\item{blank_to_blank}{A logical indicating whether to convert blank strings to blank strings. Default is TRUE.}
 }
 \value{
 A character vector of APA formatted numbers corresponding to 'x'.
@@ -29,6 +35,10 @@ This function formats a given numeric input to APA style. This involves rounding
 the number to a specified number of decimal places. Any leading zeros before
 the decimal point are also removed. It can optionally add a space before the decimal point for numbers
 less than 1 and greater than -1, without a leading 0 or - sign.
+}
+\details{
+Character inputs are converted to numeric using \code{as.numeric} before being formatted.
+A warning regarding "NAs introduced by coercion" will be given if any non-numeric values are present in the input.
 }
 \examples{
 apa_num(-0.1) # returns "-.10"
