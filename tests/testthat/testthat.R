@@ -86,6 +86,7 @@ test_that("Check plot_missing_correlations on mtcars_missing",{
 
 })
 
+<<<<<<< HEAD
 
 # Test 1: Basic functionality with a numeric vector
 test_that("sum_score calculates correctly with simple numeric input", {
@@ -132,4 +133,17 @@ test_that("sum_score runs without error on a data frame and returns correct valu
 
 
 
+=======
+# Test for apa_num to check that blank strings and NAs are converted to blank strings
+
+test_that("Check apa_num ", {
+  x = c(1, .5, .213,-2134.124, -.123124,NA,"",4,2)
+  expect_equal(gbtoolbox::apa_num(x, remove_leading_zeros = TRUE), c("1.00", " .50", " .21", "-2134.12", "-.12", "", "", "4.00", "2.00"))
+})
+
+# Test for apa_num to check that character NA ("NA") is converted to blank string
+
+test_that("Check apa_num ", {
+  expect_equal(gbtoolbox::apa_num("NA"), "")
+>>>>>>> 48a04860c62c21866850cf512f77c9728b7b00d5
 })
