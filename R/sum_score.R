@@ -72,7 +72,7 @@ sum_score = function(input=NULL,
     perc_missing_table =  table(perc_missing)
     names(perc_missing_table) = gbtoolbox:::apa_num(as.numeric(names(perc_missing_table)))
     names(perc_missing_table) = paste0(round(as.numeric(names(perc_missing_table))*100), "%")
-    cat("Percent missing on the calculated sumscore variable:\n")
+    cat("Percentage of missing data for each row of input data:\n")
     print(perc_missing_table)
     cat("\n")
   }
