@@ -86,8 +86,6 @@ test_that("Check plot_missing_correlations on mtcars_missing",{
 
 })
 
-<<<<<<< HEAD
-
 # Test 1: Basic functionality with a numeric vector
 test_that("sum_score calculates correctly with simple numeric input", {
   result <- sum_score(c(1, NA, 3, 4))
@@ -131,9 +129,7 @@ test_that("sum_score runs without error on a data frame and returns correct valu
   # Check if the third element of ss1 is the mean of the non-missing values multiplied by 4
   expect_equal(as.numeric(ss1[3]), mean(c(3.85, 18.61, 1, 1)) * 4)
 
-
-
-=======
+})
 # Test for apa_num to check that blank strings and NAs are converted to blank strings
 
 test_that("Check apa_num ", {
@@ -145,5 +141,4 @@ test_that("Check apa_num ", {
 
 test_that("Check apa_num ", {
   expect_equal(gbtoolbox::apa_num("NA"), "")
->>>>>>> 48a04860c62c21866850cf512f77c9728b7b00d5
 })

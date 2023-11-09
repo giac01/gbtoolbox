@@ -37,8 +37,7 @@ the decimal point are also removed. It can optionally add a space before the dec
 less than 1 and greater than -1, without a leading 0 or - sign.
 }
 \details{
-Character inputs are converted to numeric using \code{as.numeric} before being formatted.
-A warning regarding "NAs introduced by coercion" will be given if any non-numeric values are present in the input.
+Character inputs are converted to numeric using \code{as.numeric} before being formatted. Warnings regarding NAs introduced by coercion are suppressed.
 }
 \examples{
 apa_num(-0.1) # returns "-.10"
