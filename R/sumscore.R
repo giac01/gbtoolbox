@@ -10,6 +10,7 @@ sumscore = function(df_input=NULL,
                     print_missing_table = TRUE,
                     print_missing_each_input_var = FALSE
                     ){
+  warning("This function is now depreciated - use sum_score instead")
 
   perc_missing = apply(df_input, 1, function(x) length(which(is.na(x)))/length(x))
 
