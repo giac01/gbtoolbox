@@ -4,12 +4,14 @@
 \alias{reliability}
 \title{Estimate Reliability from Bayesian statistical models}
 \usage{
-reliability(input_draws, verbose = TRUE)
+reliability(input_draws, verbose = TRUE, level = 0.95)
 }
 \arguments{
 \item{input_draws}{A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.}
 
 \item{verbose}{A logical value indicating whether to print detailed information about the input data. Default is TRUE.}
+
+\item{level}{A numeric value indicating the credibility level for the highest density continuous interval (HDCI). Default is 0.95 (95%).}
 }
 \value{
 A list with the following components:
@@ -17,12 +19,10 @@ A list with the following components:
   \item{hdci}{A data frame with the highest density continuous interval (HDCI) for the reliability posterior.}
   \item{pd}{A numeric value representing the posterior probability of the direction of the reliability.}
   \item{reliability_posterior}{A numeric vector of reliability values for each posterior draw.}
-  \item{input_draws_1}{A matrix of the first half of the shuffled posterior draws.}
-  \item{input_draws_2}{A matrix of the second half of the shuffled posterior draws.}
 }
 }
 \description{
-This approach measures of the internal consistency reliability of posterior estimates from a Bayesian model.
+This function measures internal consistency reliability using the posterior draws from a Bayesian model.
 }
 \details{
 For more detail, see our pre-print: ADD LINK

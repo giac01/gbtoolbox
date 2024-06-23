@@ -1,19 +1,19 @@
-#' Estimate Reliability from Bayesian statistical models
+#' Estimate internal consistency teliability from Bayesian statistical models
 #'
-#' This approach measures of the internal consistency reliability of posterior estimates from a Bayesian model.
+#' This function measures internal consistency reliability using posterior draws from a Bayesian model.
 #'
 #' For more detail, see our pre-print: ADD LINK
 #'
 #' @param input_draws A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.
 #' @param verbose A logical value indicating whether to print detailed information about the input data. Default is TRUE.
+#' @param level A numeric value indicating the credibility level for the highest density continuous interval (HDCI). Default is 0.95 (95%).
+
 #'
 #' @return A list with the following components:
 #' \describe{
 #'   \item{hdci}{A data frame with the highest density continuous interval (HDCI) for the reliability posterior.}
 #'   \item{pd}{A numeric value representing the posterior probability of the direction of the reliability.}
 #'   \item{reliability_posterior}{A numeric vector of reliability values for each posterior draw.}
-#'   \item{input_draws_1}{A matrix of the first half of the shuffled posterior draws.}
-#'   \item{input_draws_2}{A matrix of the second half of the shuffled posterior draws.}
 #' }
 #'
 #' @details
@@ -37,7 +37,12 @@
 #' }
 #'
 #' @export
-reliability <- function(input_draws, verbose = TRUE) {
+reliability <- function(
+    input_draws,
+    verbose = TRUE,
+    level   = .95
+) {
+  if (!is.numeric(level) || level <= 0 || level >= 1) stop("level must be a numeric value between 0 and 1")
 
   input_draws <- as.matrix(input_draws)
 
@@ -50,8 +55,11 @@ reliability <- function(input_draws, verbose = TRUE) {
   input_draws_1 <- input_draws[, col_select[1:floor(length(col_select) / 2)]]
   input_draws_2 <- input_draws[, col_select[(floor(length(col_select) / 2) + 1):length(col_select)]]
   reliability_posterior <- sapply(1:ncol(input_draws_1), function(i) cor(input_draws_1[, i], input_draws_2[, i], method = "pearson"))
-  hdci <- ggdist::mean_hdci(reliability_posterior, .width = 0.95)
+  hdci <- ggdist::mean_hdci(reliability_posterior, .width = level)
   pd <- bayestestR::p_direction(reliability_posterior)$pd
 
-  return(list(hdci = hdci, pd = pd, reliability_posterior = reliability_posterior))
+  return(list(
+    hdci = hdci,
+    pd = pd,
+    reliability_posterior = reliability_posterior))
 }

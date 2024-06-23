@@ -149,7 +149,7 @@ test_that("Reliability is zero for random numbers", {
   example_draws <- matrix(rnorm(500*2000),  ncol = 2000)
 
   # Calculate reliability
-  result <- reliability(example_draws, verbose = TRUE)
+  result <- reliability(example_draws, verbose = FALSE)
   expect_equal(round(result$hdci$y,2),0)
 })
 
@@ -162,7 +162,7 @@ test_that("Reliability is zero for random numbers", {
 
 
   # Calculate reliability
-  result <- reliability(example_draws, verbose = TRUE)
+  result <- reliability(example_draws, verbose = FALSE)
   expect_equal(round(result$hdci$y,2),.6)
 })
 
