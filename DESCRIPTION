@@ -8,14 +8,16 @@ Description: Assortment of handy R functions. This package is still a very early
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports: 
     stats,
     base,
     utils,
     reshape2,
     jtools,
-    ggplot2
+    ggplot2,
+    ggdist,
+    bayestestR
 Exports:
     map_normal,
     plot_correlations,
@@ -25,5 +27,6 @@ Exports:
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

@@ -52,7 +52,7 @@ test_that("Check plot_correlations clustering creates a plot", {
   suppressWarnings({
   plot <- gbtoolbox::plot_correlations(mtcars_missing, cluster_variables = TRUE, suppress_warning_message = TRUE)
   })
-  expect_true(is.ggplot(plot))
+  expect_true(ggplot2::is.ggplot(plot))
 
   # Alternatively, if you expect the function might throw warnings but you only want to ensure it doesn't throw errors:
   # expect_error(gbtoolbox::plot_correlations(mtcars_missing, cluster_variables = TRUE, suppress_warning_message = TRUE), NA)
@@ -108,14 +108,14 @@ test_that("sum_score runs without error on a data frame and returns correct valu
   df_test[2, 1:3] <- NaN
 
   ss1 <- df_test %>%
-    select(1:4) %>%
+    dplyr::select(1:4) %>%
     sum_score()
 
   ss2 <- df_test %>%
-    rowwise() %>%
-    mutate(ss = sum_score(c(drat, qsec, vs, am))) %>%
-    ungroup() %>%
-    pull(ss)
+    dplyr::rowwise() %>%
+    dplyr::mutate(ss = sum_score(c(drat, qsec, vs, am))) %>%
+    dplyr::ungroup() %>%
+    dplyr::pull(ss)
 
   # Check if ss1 and ss2 are identical
   expect_true(identical(as.numeric(ss1), as.numeric(ss2)))
@@ -142,3 +142,27 @@ test_that("Check apa_num ", {
 test_that("Check apa_num ", {
   expect_equal(gbtoolbox::apa_num("NA"), "")
 })
+
+# Reliability tests
+test_that("Reliability is zero for random numbers", {
+  set.seed(123)
+  example_draws <- matrix(rnorm(500*2000),  ncol = 2000)
+
+  # Calculate reliability
+  result <- reliability(example_draws, verbose = TRUE)
+  expect_equal(round(result$hdci$y,2),0)
+})
+
+test_that("Reliability is zero for random numbers", {
+  bw_var = .6
+  err_var = .4
+  bw_means = rnorm(20000, sd = sqrt(bw_var))
+  example_draws = t(sapply(bw_means, function(mean)
+    rnorm(2001, mean = mean, sd = sqrt(err_var))))
+
+
+  # Calculate reliability
+  result <- reliability(example_draws, verbose = TRUE)
+  expect_equal(round(result$hdci$y,2),.6)
+})
+
