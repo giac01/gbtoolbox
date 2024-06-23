@@ -23,7 +23,8 @@ Exports:
     plot_correlations,
     apa_numdevtools,
     plot_pairwise_missing,
-    plot_missing_correlations
+    plot_missing_correlations,
+    reliability
 Suggests: 
     knitr,
     rmarkdown,
