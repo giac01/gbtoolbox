@@ -46,6 +46,21 @@ reliability <- function(
 
   input_draws <- as.matrix(input_draws)
 
+  # Check for columns with zero SD
+  sds <- apply(input_draws, 2, sd, na.rm = TRUE)
+  zero_sd_cols <- which(sds == 0)
+  if (length(zero_sd_cols) > 0) {
+    warning(sprintf("Found %d column(s) with zero standard deviation (columns: %s)", 
+                   length(zero_sd_cols), 
+                   paste(zero_sd_cols, collapse = ", ")))
+  }
+
+  # Check for NAs in input
+  na_count <- sum(is.na(input_draws))
+  if (na_count > 0) {
+    warning(sprintf("Found %d NA value(s) in input_draws", na_count))
+  }
+    
   if (verbose) {
     print(paste0("Number of subjects: ", nrow(input_draws)))
     print(paste0("Number of posterior draws: ", ncol(input_draws)))
@@ -54,7 +69,22 @@ reliability <- function(
   col_select <- sample(1:ncol(input_draws), replace = FALSE)
   input_draws_1 <- input_draws[, col_select[1:floor(length(col_select) / 2)]]
   input_draws_2 <- input_draws[, col_select[(floor(length(col_select) / 2) + 1):length(col_select)]]
-  reliability_posterior <- sapply(1:ncol(input_draws_1), function(i) cor(input_draws_1[, i], input_draws_2[, i], method = "pearson"))
+    
+   # Calculate correlations and handle NAs
+  reliability_posterior <- sapply(1:ncol(input_draws_1), function(i) {
+    x <- input_draws_1[, i]
+    y <- input_draws_2[, i]
+   
+   # Return 0 if either column has zero variance
+    if (var(x, na.rm = TRUE) == 0 || var(y, na.rm = TRUE) == 0) {
+      return(0)
+   }
+   
+   # Calculate correlation and handle NA
+   cor_val <- cor(x, y, method = "pearson")
+   return(cor_val)
+  })
+  
   hdci <- ggdist::mean_hdci(reliability_posterior, .width = level)
   pd <- bayestestR::p_direction(reliability_posterior)$pd
 
