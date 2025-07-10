@@ -30,16 +30,7 @@
 #' iris_test = iris
 #' iris_test[1,1:3] = NA
 #' iris_test[c(4,15,16),2] = NA
-#' iris_test %>%
-#'   select(1:4) %>%
-#'   sum_score(max_percent_missing_allowed = .2, print_missing_table = TRUE)
-#'
-#' # More complex usage with dplyr's rowwise operation
-#' # Warnings and messages are printed to the console may not be visible when using pipes.
-#' iris_test %>%
-#'   rowwise() %>%
-#'   mutate(ss = sum_score(c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width), max_percent_missing_allowed = .2)) %>%
-#'   ungroup()
+#' sum_score(iris_test[,1:4], max_percent_missing_allowed = .2, print_missing_table = TRUE)
 #'
 #' @export
 # note : documentation partly created by chatgpt4 (checked by the author)
@@ -98,7 +89,7 @@ sum_score = function(input=NULL,
   scores[perc_missing==1] = NA                                                  # Prevents NaNs from mean(c(NA,NA,NA))
 
   if (plot_scores) {
-    hist(scores, main = "Distribution of Sum Scores", xlab = "Sum Scores")
+    graphics::hist(scores, main = "Distribution of Sum Scores", xlab = "Sum Scores")
   }
 
   return(scores)

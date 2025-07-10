@@ -2,36 +2,25 @@
 % Please edit documentation in R/reliability.R
 \name{reliability}
 \alias{reliability}
-\title{Estimate Reliability from Bayesian statistical models}
+\title{Estimate reliability from Bayesian statistical models}
 \usage{
 reliability(input_draws, verbose = TRUE, level = 0.95)
 }
 \arguments{
 \item{input_draws}{A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.}
 
-\item{verbose}{A logical value indicating whether to print detailed information about the input data. Default is TRUE.}
+\item{verbose}{Logical. Print detailed information about the input data. Default is TRUE.}
 
-\item{level}{A numeric value indicating the credibility level for the highest density continuous interval (HDCI). Default is 0.95 (95%).}
+\item{level}{Numeric. Credibility level for the highest density continuous interval. Default is 0.95.}
 }
 \value{
-A list with the following components:
-\describe{
-  \item{hdci}{A data frame with the highest density continuous interval (HDCI) for the reliability posterior.}
-  \item{pd}{A numeric value representing the posterior probability of the direction of the reliability.}
-  \item{reliability_posterior}{A numeric vector of reliability values for each posterior draw.}
-}
+A list containing:
+- hdci: A data frame with the highest density continuous interval for the reliability posterior
+- pd: A numeric value representing the posterior probability of the direction of the reliability
+- reliability_posterior: A numeric vector of reliability values for each posterior draw
 }
 \description{
-This function measures internal consistency reliability using the posterior draws from a Bayesian model.
-}
-\details{
-For more detail, see our pre-print: ADD LINK
-
-
-The function calculates the reliability by randomly splitting the posterior draws into two halves and then computing
-the Pearson correlation between corresponding columns of the two halves. This process is repeated for each pair
-of columns, and the resulting correlations form the reliability posterior distribution. The function then calculates
-the 95% highest density continuous interval (HDCI) and the posterior probability of the direction (pd) of the reliability.
+This function measures internal consistency reliability using posterior draws from a Bayesian model.
 }
 \examples{
 \dontrun{
@@ -44,7 +33,4 @@ result <- reliability(example_draws, verbose = TRUE)
 print(result)
 }
 
-}
-\references{
-ADD REF
 }

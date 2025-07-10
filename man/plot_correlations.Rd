@@ -6,8 +6,8 @@
 \usage{
 plot_correlations(
   dat,
-  variable_labels = NULL,
-  textadjust = 2,
+  text_size_r = 2.8,
+  text_size_axis = 10,
   sample_size = TRUE,
   p_threshold_col = NULL,
   confidence_interval = TRUE,
@@ -17,15 +17,17 @@ plot_correlations(
   abs_colour = TRUE,
   cluster_variables = FALSE,
   n_decimal_places = 2,
+  n_decimal_places_r = NULL,
+  n_decimal_places_ci = NULL,
   suppress_warning_message = FALSE
 )
 }
 \arguments{
 \item{dat}{A dataframe or matrix for which to compute correlations. Note: A correlation matrix should not be provided as input.}
 
-\item{variable_labels}{A character vector of labels for each variable (i.e., each column in `dat`). If missing (NULL), column names from `dat` are used.}
+\item{text_size_r}{A scalar that adjusts correlation text size by a specific magnification factor.}
 
-\item{textadjust}{A scalar that adjusts text size by a specific magnification factor.}
+\item{text_size_axis}{A scalar that adjusts axis text size by a specific magnification factor.}
 
 \item{sample_size}{Logical. If TRUE, the function includes sample sizes on the upper diagonal. If FALSE, these are left blank.}
 
@@ -45,6 +47,10 @@ plot_correlations(
 
 \item{n_decimal_places}{The number of decimal places to use for plot text.}
 
+\item{n_decimal_places_r}{The number of decimal places to use for correlation (over-rides n_decimal_places)}
+
+\item{n_decimal_places_ci}{The number of decimal places to use for confidence intervals (over-rides n_decimal_places)}
+
 \item{suppress_warning_message}{Logical. If TRUE, suppresses warning message about the function being in beta.}
 }
 \value{
@@ -56,10 +62,9 @@ The function provides a wrapper around ggplot2 to easily create a correlation ma
 \examples{
 X = sapply(1:10, function(i) rnorm(100))
 X = as.data.frame(X)
-My_Labels = c(paste0("Predictor ",1:5), paste0("Outcome ",1:5))
 
-plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE)
+plot_correlations(X, sample_size = TRUE, confidence_interval = FALSE)
 
-plot_correlations(X, variable_labels = My_Labels, sample_size = TRUE, confidence_interval = FALSE) +
+plot_correlations(X, sample_size = TRUE, confidence_interval = FALSE) +
 ggplot2::labs(title = "My Title")
 }

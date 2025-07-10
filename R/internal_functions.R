@@ -114,7 +114,10 @@
 
 # Confidence Interval Function Required for PlotCorrelationMatrix --------------
 
-.R_ConInt = function(x,y, n_decimal_places = 2){
+.R_ConInt = function(
+    x,
+    y,
+    n_decimal_places = 2){
   # browser()
   if(base::is.na(stats::cor(x,y, use="pairwise.complete.obs"))){
     # return(list(CI="0", N=nrow(na.omit(cbind.data.frame(x,y))), CI_l="0"))
@@ -123,7 +126,7 @@
   } else {
     CI = stats::cor.test(x,y)$conf.int[1:2]
     # CI = base::gsub("^\\s","",gsub("0\\.", "\\.",round(CI, digits=n_decimal_places)))
-    CI = gbtoolbox::apa_num(CI)
+    CI = gbtoolbox::apa_num(CI, n_decimal_places = n_decimal_places)
     N = base::as.numeric(stats::cor.test(x,y)$parameter + 2)
     CI_l =     base::paste0( "[",CI[1],", ",CI[2],"]", sep="")
     out =    base::paste0(N,"\n[",CI[1],", ",CI[2],"]", sep="")

@@ -1,6 +1,6 @@
-library(testthat)
-library(devtools)
-devtools::load_all()
+# library(testthat)
+# library(devtools)
+# devtools::load_all()
 rm(list= ls(all.names = TRUE))
 
 # Create missing dataset
@@ -26,7 +26,7 @@ test_that("Check apa_num ", {
   expect_error(gbtoolbox::apa_num(rnorm(10)), NA)
 })
 
-test_that("Check plotcor",{
+test_that("Check plot_correlations, plot_missing_correlations and plot_pairwise_missing",{
 
   #Get base R result
   # mtcars_missing <- mtcars
@@ -42,6 +42,19 @@ test_that("Check plotcor",{
     , NA
   )
 
+  expect_error(
+    gbtoolbox::plot_missing_correlations(mtcars_missing, suppress_warning_message = TRUE)
+
+    , NA
+  )
+
+  expect_error(
+    gbtoolbox::plot_pairwise_missing(mtcars_missing, suppress_warning_message = TRUE)
+
+    , NA
+  )
+
+
 })
 
 test_that("Check plot_correlations clustering creates a plot", {
@@ -50,7 +63,12 @@ test_that("Check plot_correlations clustering creates a plot", {
 
   # Test that plot_correlations returns a ggplot object and does not throw errors or warnings
   suppressWarnings({
-  plot <- gbtoolbox::plot_correlations(mtcars_missing, cluster_variables = TRUE, suppress_warning_message = TRUE)
+  plot <- gbtoolbox::plot_correlations(
+    mtcars_missing,
+    cluster_variables = TRUE,
+    suppress_warning_message = TRUE,
+    n_decimal_places = 3
+    )
   })
   expect_true(ggplot2::is.ggplot(plot))
 

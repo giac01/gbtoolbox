@@ -53,15 +53,6 @@ plot the distribution of the scores, and provide detailed missing data diagnosti
 iris_test = iris
 iris_test[1,1:3] = NA
 iris_test[c(4,15,16),2] = NA
-iris_test \%>\%
-  select(1:4) \%>\%
-  sum_score(max_percent_missing_allowed = .2, print_missing_table = TRUE)
-
-# More complex usage with dplyr's rowwise operation
-# Warnings and messages are printed to the console may not be visible when using pipes.
-iris_test \%>\%
-  rowwise() \%>\%
-  mutate(ss = sum_score(c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width), max_percent_missing_allowed = .2)) \%>\%
-  ungroup()
+sum_score(iris_test[,1:4], max_percent_missing_allowed = .2, print_missing_table = TRUE)
 
 }

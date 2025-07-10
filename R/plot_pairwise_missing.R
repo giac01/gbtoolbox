@@ -1,4 +1,6 @@
 
+utils::globalVariables(c("Var1", "Var2", "ValueFill", "value"))
+
 #' Create a ggplot2 plot of pairwise missingness
 #'
 #' @description
@@ -81,7 +83,7 @@ plot_pairwise_missing = function(dat,
     ggplot2::geom_tile() + ggplot2::labs(x=NULL, y=NULL) +
     ggplot2::theme(axis.text = ggplot2::element_text(size=5*textadjust)) +
     ggplot2::geom_text(ggplot2::aes(label=value), size=1.4*textadjust) +
-    jtools::theme_apa() +
+    ggplot2::theme_bw() +
     ggplot2::scale_fill_gradient2(low = low_colour, high = high_colour, midpoint = 0, na.value = "#F5F5F5", guide = "colourbar", aesthetics = "fill") +
     ggplot2::theme(legend.position = "#DAECED") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,hjust=1)) +
