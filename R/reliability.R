@@ -25,6 +25,8 @@
 #' \dontrun{
 #' # See https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html for more details on this example
 #'
+#' # Simulate data
+#'
 #' set.seed(1)
 #' N                   = 5000 # number of subjects (mice)
 #' J                   = 3    # number of measurements per subject
@@ -42,27 +44,29 @@
 #'   group_by(mouse) %>%
 #'   summarise(average_measurement = mean(measurement))
 #'
-#' cat("Simulation reliability = ")
+#' # Reliability should equal this:
 #'
 #' true_score_variance/(true_score_variance+error_variance/J)
 #'
-#' cat("Squared Correlation between mean and true scores  = ")
-#' # This may slightly differ to above due to sampling variance
+#' # Approximately the same as:
 #'
 #' cor(df_average_lengths$average_measurement, true_scores)^2
 #'
 #' # Fit model and calculate RMU
-#' # I've reduced the number of MCMC chains here to two for speed - you may want more in practice!
 #'
 #' brms_model = brm(
 #'   measurement ~ 1 + (1 | mouse),
 #'   data    = df
 #' )
 #'
+#' # Extract posterior draws from brms model
+#'
 #' posterior_draws = brms_model %>%
 #'   as_draws_df() %>%
 #'   select(starts_with("r_mouse")) %>%
 #'   t()
+#'
+#' # Calculate RMU
 #'
 #' reliability(posterior_draws)$hdci
 #' }
