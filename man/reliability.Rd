@@ -26,8 +26,58 @@ This function measures reliability using posterior draws from a fitted Bayesian 
 \details{
 To use this function, you will need to provide a matrix (input_draws) that contains the posterior draws for the parameter you wish to calculate reliability. The function assumes that rows of input_draws represent subjects and columns represent posterior draws.
 
-For an example of how to apply this function to go/go-no task data using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_calculating_rmu_gonogo.html}{this tutorial}
+For an example of how to apply this function to calculate mean score reliability using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html}{this tutorial}.
+
+For an example of how to apply this function to go/go-no task data using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_calculating_rmu_gonogo.html}{this tutorial}.
+}
+\examples{
+\dontrun{
+# See https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html for more details on this example
+
+set.seed(1)
+N                   = 5000 # number of subjects (mice)
+J                   = 3    # number of measurements per subject
+true_score_variance = 1
+error_variance      = 10
+
+df = expand.grid(j = 1:J, mouse = 1:N)
+
+true_scores       = rnorm(N, mean = 10, sd = sqrt(true_score_variance))
+measurement_error = rnorm(N*J, mean = 0, sd = sqrt(error_variance))
+
+df$measurement = true_scores[df$mouse] + measurement_error
+
+df_average_lengths = df \%>\%
+  group_by(mouse) \%>\%
+  summarise(average_measurement = mean(measurement))
+
+cat("Simulation reliability = ")
+
+true_score_variance/(true_score_variance+error_variance/J)
+
+cat("Squared Correlation between mean and true scores  = ")
+# This may slightly differ to above due to sampling variance
+
+cor(df_average_lengths$average_measurement, true_scores)^2
+
+# Fit model and calculate RMU
+# I've reduced the number of MCMC chains here to two for speed - you may want more in practice!
+
+brms_model = brm(
+  measurement ~ 1 + (1 | mouse),
+  data    = df
+)
+
+posterior_draws = brms_model \%>\%
+  as_draws_df() \%>\%
+  select(starts_with("r_mouse")) \%>\%
+  t()
+
+reliability(posterior_draws)$hdci
+}
+
+
 }
 \references{
-Bignardi, G., Kievit, R., & Bürkner, P. C. (2025). A general method for estimating reliability using Bayesian Measurement Uncertainty. PsyArXiv. \href{https://doi.org/10.31234/osf.io/h54k8}{doi:10.31234/osf.io/h54k8}
+Bignardi, G., Kievit, R., & Bürkner, P. C. (2025). A general method for estimating reliability using Bayesian Measurement Uncertainty. PsyArXiv. \href{https://osf.io/preprints/psyarxiv/h54k8}{doi:10.31234/osf.io/h54k8}
 }
