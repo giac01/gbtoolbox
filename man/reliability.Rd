@@ -2,7 +2,7 @@
 % Please edit documentation in R/reliability.R
 \name{reliability}
 \alias{reliability}
-\title{Estimate reliability from Bayesian statistical models}
+\title{Estimate reliability (Relative Measurement Uncertainty) from Bayesian measurement models}
 \usage{
 reliability(input_draws, verbose = TRUE, level = 0.95)
 }
@@ -15,22 +15,19 @@ reliability(input_draws, verbose = TRUE, level = 0.95)
 }
 \value{
 A list containing:
-- hdci: A data frame with the highest density continuous interval for the reliability posterior
-- pd: A numeric value representing the posterior probability of the direction of the reliability
-- reliability_posterior: A numeric vector of reliability values for each posterior draw
+\itemize{
+  \item hdci: A data frame with a point-estimate (posterior mean) and highest density continuous interval for reliability, calculated using the ggdist::mean_hdci function
+  \item reliability_posterior_draws: A numeric vector of posterior draws for reliability, of length K/2 (K = number of columns/draws in your input_draws matrix)
+}
 }
 \description{
-This function measures internal consistency reliability using posterior draws from a Bayesian model.
+This function measures reliability using posterior draws from a fitted Bayesian model.
 }
-\examples{
-\dontrun{
-# Generate some example data
-set.seed(123)
-example_draws <- matrix(rnorm(1000), nrow = 50, ncol = 20)
+\details{
+To use this function, you will need to provide a matrix (input_draws) that contains the posterior draws for the parameter you wish to calculate reliability. The function assumes that rows of input_draws represent subjects and columns represent posterior draws.
 
-# Calculate reliability
-result <- reliability(example_draws, verbose = TRUE)
-print(result)
+For an example of how to apply this function to go/go-no task data using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_calculating_rmu_gonogo.html}{this tutorial}
 }
-
+\references{
+Bignardi, G., Kievit, R., & Bürkner, P. C. (2025). A general method for estimating reliability using Bayesian Measurement Uncertainty. PsyArXiv. \href{https://doi.org/10.31234/osf.io/h54k8}{doi:10.31234/osf.io/h54k8}
 }

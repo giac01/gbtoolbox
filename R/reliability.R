@@ -1,26 +1,23 @@
-#' Estimate reliability from Bayesian statistical models
+#' Estimate reliability (Relative Measurement Uncertainty) from Bayesian measurement models
 #'
-#' This function measures internal consistency reliability using posterior draws from a Bayesian model.
+#' This function measures reliability using posterior draws from a fitted Bayesian model.
+#'
+#' To use this function, you will need to provide a matrix (input_draws) that contains the posterior draws for the parameter you wish to calculate reliability. The function assumes that rows of input_draws represent subjects and columns represent posterior draws.
+#'
+#' For an example of how to apply this function to go/go-no task data using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_calculating_rmu_gonogo.html}{this tutorial}
 #'
 #' @param input_draws A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.
 #' @param verbose Logical. Print detailed information about the input data. Default is TRUE.
 #' @param level Numeric. Credibility level for the highest density continuous interval. Default is 0.95.
 #'
 #' @return A list containing:
-#' - hdci: A data frame with the highest density continuous interval for the reliability posterior
-#' - pd: A numeric value representing the posterior probability of the direction of the reliability
-#' - reliability_posterior: A numeric vector of reliability values for each posterior draw
-#'
-#' @examples
-#' \dontrun{
-#' # Generate some example data
-#' set.seed(123)
-#' example_draws <- matrix(rnorm(1000), nrow = 50, ncol = 20)
-#'
-#' # Calculate reliability
-#' result <- reliability(example_draws, verbose = TRUE)
-#' print(result)
+#' \itemize{
+#'   \item hdci: A data frame with a point-estimate (posterior mean) and highest density continuous interval for reliability, calculated using the ggdist::mean_hdci function
+#'   \item reliability_posterior_draws: A numeric vector of posterior draws for reliability, of length K/2 (K = number of columns/draws in your input_draws matrix)
 #' }
+#'
+#' @references
+#' Bignardi, G., Kievit, R., & Bürkner, P. C. (2025). A general method for estimating reliability using Bayesian Measurement Uncertainty. PsyArXiv. \href{https://doi.org/10.31234/osf.io/h54k8}{doi:10.31234/osf.io/h54k8}
 #'
 #' @export
 reliability <- function(
@@ -57,7 +54,7 @@ reliability <- function(
   input_draws_2 <- input_draws[, col_select[(floor(length(col_select) / 2) + 1):length(col_select)]]
 
    # Calculate correlations and handle NAs
-  reliability_posterior <- sapply(1:ncol(input_draws_1), function(i) {
+  reliability_posterior_draws <- sapply(1:ncol(input_draws_1), function(i) {
     x <- input_draws_1[, i]
     y <- input_draws_2[, i]
 
@@ -71,11 +68,13 @@ reliability <- function(
    return(cor_val)
   })
 
-  hdci <- ggdist::mean_hdci(reliability_posterior, .width = level)
-  pd <- bayestestR::p_direction(reliability_posterior)$pd
+  hdci <- ggdist::mean_hdci(reliability_posterior_draws, .width = level)
+
+  colnames(hdci)[1] = "rmu_estimate"
+  colnames(hdci)[2] = "hdci_lowerbound"
+  colnames(hdci)[3] = "hdci_upperbound"
 
   return(list(
     hdci = hdci,
-    pd = pd,
-    reliability_posterior = reliability_posterior))
+    reliability_posterior_draws = reliability_posterior_draws))
 }

@@ -168,7 +168,7 @@ test_that("Reliability is zero for random numbers", {
 
   # Calculate reliability
   result <- reliability(example_draws, verbose = FALSE)
-  expect_equal(round(result$hdci$y,2),0)
+  expect_equal(round(result$hdci$rmu_estimate,2),0)
 })
 
 test_that("Reliability is zero for random numbers", {
@@ -181,6 +181,6 @@ test_that("Reliability is zero for random numbers", {
 
   # Calculate reliability
   result <- reliability(example_draws, verbose = FALSE)
-  expect_equal(round(result$hdci$y,2),.6)
+  expect_equal(round(result$hdci$rmu_estimate,2),.6)
 })
 
