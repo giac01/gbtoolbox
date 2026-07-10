@@ -5,10 +5,9 @@ Version: 0.0.2.8
 Author: Giacomo Bignardi
 Maintainer: Giacomo Bignardi <bignardig@outlook.com>
 Description: Assortment of handy R functions. This package is still a very early beta so please use function with caution. 
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
 Imports: 
     stats,
     base,
@@ -16,7 +15,6 @@ Imports:
     reshape2,
     ggplot2,
     ggdist,
-    bayestestR,
     graphics
 Exports:
     map_normal,
@@ -32,3 +30,4 @@ Suggests:
     dplyr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0

@@ -9,12 +9,12 @@ reliability(input_draws, verbose = TRUE, level = 0.95)
 \arguments{
 \item{input_draws}{A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.}
 
-\item{verbose}{Logical. Print detailed information about the input data. Default is TRUE.}
+\item{verbose}{Logical. Print a summary (number of subjects, draws, estimate and interval) when the result is printed. Default is TRUE.}
 
 \item{level}{Numeric. Credibility level for the highest density continuous interval. Default is 0.95.}
 }
 \value{
-A list containing:
+An object of class \code{gbt_reliability}. Printing the object shows a short summary; the underlying object is a plain list that can be accessed as usual:
 \itemize{
   \item hdci: A data frame with a point-estimate (posterior mean) and highest density continuous interval for reliability, calculated using the ggdist::mean_hdci function
   \item reliability_posterior_draws: A numeric vector of posterior draws for reliability, of length K/2 (K = number of columns/draws in your input_draws matrix)
@@ -32,7 +32,8 @@ For an example of how to apply this function to go/go-no task data using brms, s
 }
 \examples{
 \dontrun{
-# See https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html for more details on this example
+# See https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html
+# for more details on this example
 
 # Simulate data
 

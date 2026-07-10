@@ -70,7 +70,7 @@ test_that("Check plot_correlations clustering creates a plot", {
     n_decimal_places = 3
     )
   })
-  expect_true(ggplot2::is.ggplot(plot))
+  expect_true(ggplot2::is_ggplot(plot))
 
   # Alternatively, if you expect the function might throw warnings but you only want to ensure it doesn't throw errors:
   # expect_error(gbtoolbox::plot_correlations(mtcars_missing, cluster_variables = TRUE, suppress_warning_message = TRUE), NA)
@@ -171,7 +171,7 @@ test_that("Reliability is zero for random numbers", {
   expect_equal(round(result$hdci$rmu_estimate,2),0)
 })
 
-test_that("Reliability is zero for random numbers", {
+test_that("Reliability is correct for simple calculation", {
   bw_var = .6
   err_var = .4
   bw_means = rnorm(20000, sd = sqrt(bw_var))

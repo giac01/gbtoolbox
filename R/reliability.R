@@ -9,10 +9,10 @@
 #' For an example of how to apply this function to go/go-no task data using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_calculating_rmu_gonogo.html}{this tutorial}.
 #'
 #' @param input_draws A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.
-#' @param verbose Logical. Print detailed information about the input data. Default is TRUE.
+#' @param verbose Logical. Print a summary (number of subjects, draws, estimate and interval) when the result is printed. Default is TRUE.
 #' @param level Numeric. Credibility level for the highest density continuous interval. Default is 0.95.
 #'
-#' @return A list containing:
+#' @return An object of class \code{gbt_reliability}. Printing the object shows a short summary; the underlying object is a plain list that can be accessed as usual:
 #' \itemize{
 #'   \item hdci: A data frame with a point-estimate (posterior mean) and highest density continuous interval for reliability, calculated using the ggdist::mean_hdci function
 #'   \item reliability_posterior_draws: A numeric vector of posterior draws for reliability, of length K/2 (K = number of columns/draws in your input_draws matrix)
@@ -23,7 +23,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' # See https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html for more details on this example
+#' # See https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html
+#' # for more details on this example
 #'
 #' # Simulate data
 #'
@@ -97,11 +98,6 @@ reliability <- function(
     warning(sprintf("Found %d NA value(s) in input_draws", na_count))
   }
 
-  if (verbose) {
-    base::print(paste0("Number of subjects: ", nrow(input_draws)))
-    base::print(paste0("Number of posterior draws: ", ncol(input_draws)))
-  }
-
   col_select <- base::sample(1:ncol(input_draws), replace = FALSE)
   input_draws_1 <- input_draws[, col_select[1:floor(length(col_select) / 2)]]
   input_draws_2 <- input_draws[, col_select[(floor(length(col_select) / 2) + 1):length(col_select)]]
@@ -127,7 +123,43 @@ reliability <- function(
   colnames(hdci)[2] = "hdci_lowerbound"
   colnames(hdci)[3] = "hdci_upperbound"
 
-  return(list(
+  output <- list(
     hdci = hdci,
-    reliability_posterior_draws = reliability_posterior_draws))
+    reliability_posterior_draws = reliability_posterior_draws)
+
+  attr(output, "n_subjects") <- nrow(input_draws)
+  attr(output, "n_draws")    <- ncol(input_draws)
+  attr(output, "level")      <- level
+  attr(output, "verbose")    <- verbose
+  class(output) <- "gbt_reliability"
+
+  return(output)
+}
+
+#' Print method for gbt_reliability objects
+#'
+#' Prints a short summary of the reliability estimate instead of the full list of posterior draws. The full results remain accessible via \code{$hdci} and \code{$reliability_posterior_draws}.
+#'
+#' @param x An object of class \code{gbt_reliability}, as returned by \code{\link{reliability}}.
+#' @param digits Number of decimal places to display. Default is 3.
+#' @param ... Further arguments (ignored).
+#'
+#' @return \code{x}, invisibly.
+#'
+#' @export
+print.gbt_reliability <- function(x, digits = 3, ...) {
+  cat("Reliability (Relative Measurement Uncertainty)\n")
+  if (isTRUE(attr(x, "verbose"))) {
+    cat(sprintf("  Number of subjects:        %d\n", attr(x, "n_subjects")))
+    cat(sprintf("  Number of posterior draws: %d\n", attr(x, "n_draws")))
+  }
+  cat("\n")
+  cat(sprintf("  RMU estimate: %s\n", formatC(x$hdci$rmu_estimate, digits = digits, format = "f")))
+  cat(sprintf("  Posterior SD: %s\n", formatC(stats::sd(x$reliability_posterior_draws), digits = digits, format = "f")))
+  cat(sprintf("  %s%% HDCI:     [%s, %s]\n",
+              format(100 * attr(x, "level")),
+              formatC(x$hdci$hdci_lowerbound, digits = digits, format = "f"),
+              formatC(x$hdci$hdci_upperbound, digits = digits, format = "f")))
+  cat("\nAccess full results with $hdci and $reliability_posterior_draws\n")
+  invisible(x)
 }

@@ -1,4 +1,5 @@
-
+#' @importFrom graphics hist
+#' @noRd
 sumscore = function(df_input=NULL,
                     vars = NULL,
                     time = NULL,
