@@ -167,7 +167,7 @@ test_that("Reliability is zero for random numbers", {
   example_draws <- matrix(rnorm(500*2000),  ncol = 2000)
 
   # Calculate reliability
-  result <- reliability(example_draws, verbose = FALSE)
+  result <- reliability(example_draws)
   expect_equal(round(result$hdci$rmu_estimate,2),0)
 })
 
@@ -180,7 +180,53 @@ test_that("Reliability is correct for simple calculation", {
 
 
   # Calculate reliability
-  result <- reliability(example_draws, verbose = FALSE)
+  result <- reliability(example_draws)
   expect_equal(round(result$hdci$rmu_estimate,2),.6)
+})
+
+# hBayesDM integration test -----------------------------------------------
+# Fits one real hierarchical hBayesDM model (dd_hyperbolic, bundled example
+# data) with a small number of iterations and checks that reliability()
+# dispatches to reliability.hBayesDM() and returns sensible output. Skipped
+# unless hBayesDM + cmdstanr are installed, since fitting requires a working
+# cmdstan toolchain and is too slow/heavy to run on CRAN.
+
+test_that("reliability() works on a fitted hBayesDM model", {
+  skip_if_not_installed("hBayesDM")
+  skip_if_not_installed("cmdstanr")
+  skip_on_cran()
+
+  fit = hBayesDM::dd_hyperbolic(
+    data    = "example",
+    niter   = 200,
+    nwarmup = 100,
+    nchain  = 2,
+    ncore   = 1,
+    inits   = "random"
+  )
+
+  result = reliability(fit)
+
+  expect_s3_class(result, "reliability_hBayesDM")
+  expect_true(all(c("k", "beta") %in% names(result)))
+  expect_true(is.numeric(result$k$hdci$rmu_estimate))
+  expect_equal(attr(result, "n_subjects"), length(fit$all_ind_pars$subjID))
+})
+
+test_that("reliability() errors on a single-subject hBayesDM model", {
+  skip_if_not_installed("hBayesDM")
+  skip_if_not_installed("cmdstanr")
+  skip_on_cran()
+
+  fit = hBayesDM::dd_hyperbolic_single(
+    data    = "example",
+    niter   = 200,
+    nwarmup = 100,
+    nchain  = 2,
+    ncore   = 1,
+    inits   = "random"
+  )
+
+  expect_error(reliability(fit), "hierarchical, multi-participant models")
 })
 

@@ -48,7 +48,7 @@ plot_missing_correlations = function(dat,
   if (!base::is.data.frame(dat)) {dat=base::as.data.frame(dat)}
 
   # Estimate Missingness correlations and p-values
-  missingness_results      = gbtoolbox:::missingness_correlations(dat)
+  missingness_results      = missingness_correlations(dat)
   correlation_matrix_miss  = missingness_results$cor
   correlation_matrix_pvals = missingness_results$p.value
 

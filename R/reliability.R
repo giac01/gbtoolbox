@@ -1,21 +1,25 @@
 #' Estimate reliability (Relative Measurement Uncertainty) from Bayesian measurement models
 #'
 #' This function measures reliability using posterior draws from a fitted Bayesian model.
+#' \code{reliability} is a generic function: the default method takes a matrix of posterior
+#' draws directly (see below), while \code{\link{reliability.hBayesDM}} accepts a fitted
+#' \pkg{hBayesDM} model object.
 #'
-#' To use this function, you will need to provide a matrix (input_draws) that contains the posterior draws for the parameter you wish to calculate reliability. The function assumes that rows of input_draws represent subjects and columns represent posterior draws.
+#' To use the default method, you will need to provide a matrix (x) that contains the posterior draws for the parameter you wish to calculate reliability. The function assumes that rows of x represent subjects and columns represent posterior draws.
 #'
 #' For an example of how to apply this function to calculate mean score reliability using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_rmu_sum_score_reliability.html}{this tutorial}.
 #'
 #' For an example of how to apply this function to go/go-no task data using brms, see \href{https://www.bignardi.co.uk/8_bayes_reliability/tutorial_calculating_rmu_gonogo.html}{this tutorial}.
 #'
-#' @param input_draws A matrix or data frame of posterior draws. Rows represent subjects and columns represent draws.
-#' @param verbose Logical. Print a summary (number of subjects, draws, estimate and interval) when the result is printed. Default is TRUE.
-#' @param level Numeric. Credibility level for the highest density continuous interval. Default is 0.95.
+#' @param x A matrix or data frame of posterior draws (rows = subjects, columns = draws), or an
+#'   object with a specific \code{reliability} method, such as a fitted \pkg{hBayesDM} model
+#'   (see \code{\link{reliability.hBayesDM}}).
+#' @param ... Additional arguments passed to methods.
 #'
 #' @return An object of class \code{gbt_reliability}. Printing the object shows a short summary; the underlying object is a plain list that can be accessed as usual:
 #' \itemize{
 #'   \item hdci: A data frame with a point-estimate (posterior mean) and highest density continuous interval for reliability, calculated using the ggdist::mean_hdci function
-#'   \item reliability_posterior_draws: A numeric vector of posterior draws for reliability, of length K/2 (K = number of columns/draws in your input_draws matrix)
+#'   \item reliability_posterior_draws: A numeric vector of posterior draws for reliability, of length K/2 (K = number of columns/draws in your x matrix)
 #' }
 #'
 #' @references
@@ -74,14 +78,21 @@
 #'
 #'
 #' @export
-reliability <- function(
-    input_draws,
-    verbose = TRUE,
-    level   = .95
+reliability <- function(x, ...) {
+  UseMethod("reliability")
+}
+
+#' @param level Numeric. Credibility level for the highest density continuous interval. Default is 0.95.
+#' @rdname reliability
+#' @export
+reliability.default <- function(
+    x,
+    level   = .95,
+    ...
 ) {
   if (!is.numeric(level) || level <= 0 || level >= 1) stop("level must be a numeric value between 0 and 1")
 
-  input_draws <- as.matrix(input_draws)
+  input_draws <- as.matrix(x)
 
   # Check for columns with zero SD
   sds <- apply(input_draws, 2, stats::sd, na.rm = TRUE)
@@ -130,7 +141,6 @@ reliability <- function(
   attr(output, "n_subjects") <- nrow(input_draws)
   attr(output, "n_draws")    <- ncol(input_draws)
   attr(output, "level")      <- level
-  attr(output, "verbose")    <- verbose
   class(output) <- "gbt_reliability"
 
   return(output)
@@ -149,10 +159,8 @@ reliability <- function(
 #' @export
 print.gbt_reliability <- function(x, digits = 3, ...) {
   cat("Reliability (Relative Measurement Uncertainty)\n")
-  if (isTRUE(attr(x, "verbose"))) {
-    cat(sprintf("  Number of subjects:        %d\n", attr(x, "n_subjects")))
-    cat(sprintf("  Number of posterior draws: %d\n", attr(x, "n_draws")))
-  }
+  cat(sprintf("  Number of subjects:        %d\n", attr(x, "n_subjects")))
+  cat(sprintf("  Number of posterior draws: %d\n", attr(x, "n_draws")))
   cat("\n")
   cat(sprintf("  RMU estimate: %s\n", formatC(x$hdci$rmu_estimate, digits = digits, format = "f")))
   cat(sprintf("  Posterior SD: %s\n", formatC(stats::sd(x$reliability_posterior_draws), digits = digits, format = "f")))

@@ -1,17 +1,16 @@
 Package: gbtoolbox
 Type: Package
 Title: Some handy R tools
-Version: 0.0.2.9
+Version: 0.0.3.0
 Author: Giacomo Bignardi
 Maintainer: Giacomo Bignardi <bignardig@outlook.com>
 Description: Assortment of handy R functions. This package is still a very early beta so please use function with caution. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: 
+Imports:
     stats,
     base,
-    utils,
     reshape2,
     ggplot2,
     ggdist,
@@ -23,11 +22,13 @@ Exports:
     plot_pairwise_missing,
     plot_missing_correlations,
     reliability
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    dplyr
+    dplyr,
+    hBayesDM,
+    cmdstanr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0

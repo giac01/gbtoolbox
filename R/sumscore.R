@@ -17,7 +17,7 @@ sumscore = function(df_input=NULL,
 
   if (print_missing_table){
     perc_missing_table =  table(perc_missing)
-    names(perc_missing_table) = gbtoolbox:::apa_num(as.numeric(names(perc_missing_table)))
+    names(perc_missing_table) = apa_num(as.numeric(names(perc_missing_table)))
     cat("Percent missing on the calculated sumscore variable:\n")
     print(perc_missing_table)
     cat("\n")

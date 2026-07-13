@@ -61,7 +61,7 @@ plot_correlations = function(dat,
 
   # Cluster variables
   if (cluster_variables) {
-    new_order = gbtoolbox:::.sortVar(dat)
+    new_order = .sortVar(dat)
     dat = dat[,new_order]
   }
 
@@ -70,7 +70,7 @@ plot_correlations = function(dat,
 
   # Estimate Correlation Matrix
   correlation_matrix_vals = stats::cor(dat, use="pairwise.complete.obs")
-  correlation_matrix_text_vals = apply(correlation_matrix_vals, 2, function(x) gbtoolbox::apa_num(x, n_decimal_places = n_decimal_places_r))
+  correlation_matrix_text_vals = apply(correlation_matrix_vals, 2, function(x) apa_num(x, n_decimal_places = n_decimal_places_r))
 
   #Matrix on Ns per comparison - lower triag
   sample_size_matrix = sapply(variables, function(x)
@@ -99,7 +99,7 @@ plot_correlations = function(dat,
   if(confidence_interval){
     correlation_matrix_conf_int = sapply(variables, function(x)
       sapply(variables, function(y)
-        gbtoolbox:::.R_ConInt(as.numeric(dat[,x]),base::as.numeric(dat[,y]), n_decimal_places = n_decimal_places_ci)$CI
+        .R_ConInt(as.numeric(dat[,x]),base::as.numeric(dat[,y]), n_decimal_places = n_decimal_places_ci)$CI
       ))
     base::diag(correlation_matrix_conf_int) = base::diag(sample_size_matrix)
     sample_size_matrix = correlation_matrix_conf_int

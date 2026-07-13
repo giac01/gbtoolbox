@@ -51,7 +51,7 @@ sum_score = function(input=NULL,
     stop("Input must be a data frame or a numeric vector.")
   }
 
-  if (class(input)=="numeric" ){
+  if (is.numeric(input)){
     input = data.frame(t(input))
 
     check_loadings = FALSE
@@ -61,7 +61,7 @@ sum_score = function(input=NULL,
 
   if (print_missing_table){
     perc_missing_table =  table(perc_missing)
-    names(perc_missing_table) = gbtoolbox:::apa_num(as.numeric(names(perc_missing_table)))
+    names(perc_missing_table) = apa_num(as.numeric(names(perc_missing_table)))
     names(perc_missing_table) = paste0(round(as.numeric(names(perc_missing_table))*100), "%")
     cat("Percentage of missing data for each row of input data:\n")
     print(perc_missing_table)
